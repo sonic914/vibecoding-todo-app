@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="400" viewBox="0 0 900 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Lifelines -->
+  <line x1="90" y1="60" x2="90" y2="340" stroke="#888" stroke-dasharray="6,6"/>
+  <line x1="260" y1="60" x2="260" y2="340" stroke="#888" stroke-dasharray="6,6"/>
+  <line x1="430" y1="60" x2="430" y2="340" stroke="#888" stroke-dasharray="6,6"/>
+  <line x1="600" y1="60" x2="600" y2="340" stroke="#888" stroke-dasharray="6,6"/>
+  <line x1="770" y1="60" x2="770" y2="340" stroke="#888" stroke-dasharray="6,6"/>
+
+  <!-- Actor Labels -->
+  <rect x="30" y="30" width="120" height="30" rx="8" fill="#E3F2FD" stroke="#1976D2" stroke-width="2"/>
+  <text x="90" y="50" font-size="14" font-family="sans-serif" text-anchor="middle" fill="#1976D2">User (Browser)</text>
+  <rect x="200" y="30" width="120" height="30" rx="8" fill="#E8F5E9" stroke="#388E3C" stroke-width="2"/>
+  <text x="260" y="50" font-size="14" font-family="sans-serif" text-anchor="middle" fill="#388E3C">Frontend (React)</text>
+  <rect x="370" y="30" width="120" height="30" rx="8" fill="#FFFDE7" stroke="#FBC02D" stroke-width="2"/>
+  <text x="430" y="50" font-size="14" font-family="sans-serif" text-anchor="middle" fill="#FBC02D">API Gateway</text>
+  <rect x="540" y="30" width="120" height="30" rx="8" fill="#F3E5F5" stroke="#8E24AA" stroke-width="2"/>
+  <text x="600" y="50" font-size="14" font-family="sans-serif" text-anchor="middle" fill="#8E24AA">Lambda</text>
+  <rect x="710" y="30" width="120" height="30" rx="8" fill="#E1F5FE" stroke="#0288D1" stroke-width="2"/>
+  <text x="770" y="50" font-size="14" font-family="sans-serif" text-anchor="middle" fill="#0288D1">DynamoDB</text>
+
+  <!-- Sequence Arrows -->
+  <!-- 1. User -> Frontend: 할 일 추가 요청 -->
+  <line x1="90" y1="80" x2="260" y2="80" stroke="#1976D2" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="175" y="75" font-size="12" font-family="sans-serif" text-anchor="middle" fill="#1976D2">할 일 추가 요청</text>
+
+  <!-- 2. Frontend -> API Gateway: POST /tasks -->
+  <line x1="260" y1="110" x2="430" y2="110" stroke="#388E3C" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="345" y="105" font-size="12" font-family="sans-serif" text-anchor="middle" fill="#388E3C">POST /tasks</text>
+
+  <!-- 3. API Gateway -> Lambda: Invoke -->
+  <line x1="430" y1="140" x2="600" y2="140" stroke="#FBC02D" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="515" y="135" font-size="12" font-family="sans-serif" text-anchor="middle" fill="#FBC02D">Invoke</text>
+
+  <!-- 4. Lambda -> DynamoDB: 저장 -->
+  <line x1="600" y1="170" x2="770" y2="170" stroke="#8E24AA" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="685" y="165" font-size="12" font-family="sans-serif" text-anchor="middle" fill="#8E24AA">저장</text>
+
+  <!-- 5. DynamoDB -> Lambda: 저장결과 -->
+  <line x1="770" y1="200" x2="600" y2="200" stroke="#0288D1" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="685" y="195" font-size="12" font-family="sans-serif" text-anchor="middle" fill="#0288D1">저장결과</text>
+
+  <!-- 6. Lambda -> API Gateway: 응답 -->
+  <line x1="600" y1="230" x2="430" y2="230" stroke="#8E24AA" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="515" y="225" font-size="12" font-family="sans-serif" text-anchor="middle" fill="#8E24AA">응답</text>
+
+  <!-- 7. API Gateway -> Frontend: 응답 -->
+  <line x1="430" y1="260" x2="260" y2="260" stroke="#FBC02D" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="345" y="255" font-size="12" font-family="sans-serif" text-anchor="middle" fill="#FBC02D">응답</text>
+
+  <!-- 8. Frontend -> User: 결과 표시 -->
+  <line x1="260" y1="290" x2="90" y2="290" stroke="#388E3C" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="175" y="285" font-size="12" font-family="sans-serif" text-anchor="middle" fill="#388E3C">결과 표시</text>
+
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 L3,5 Z" fill="#333" />
+    </marker>
+  </defs>
+</svg>

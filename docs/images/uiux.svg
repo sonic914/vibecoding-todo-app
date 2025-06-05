@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="700" height="540" viewBox="0 0 700 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Header -->
+  <rect x="40" y="40" width="620" height="60" rx="12" fill="#1976D2"/>
+  <text x="350" y="78" font-size="24" font-family="sans-serif" text-anchor="middle" fill="#fff">TODO List</text>
+  <rect x="600" y="55" width="40" height="30" rx="6" fill="#263238" stroke="#fff" stroke-width="2"/>
+  <text x="620" y="75" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#fff">☀️/🌙</text>
+  <!-- Main Input -->
+  <rect x="60" y="120" width="580" height="50" rx="10" fill="#E3F2FD" stroke="#1976D2" stroke-width="1.5"/>
+  <text x="90" y="150" font-size="15" font-family="sans-serif" fill="#1976D2">+ 할 일을 입력하세요...</text>
+  <rect x="570" y="130" width="50" height="30" rx="6" fill="#1976D2"/>
+  <text x="595" y="150" font-size="16" font-family="sans-serif" text-anchor="middle" fill="#fff">추가</text>
+  <!-- Todo List Area (List View, corrected) -->
+  <rect x="60" y="190" width="580" height="180" rx="14" fill="#fff" stroke="#B0BEC5" stroke-width="1.5"/>
+  <!-- List Items (List View, fit in box) -->
+  <g>
+    <line x1="80" y1="220" x2="620" y2="220" stroke="#E0E0E0" stroke-width="1"/>
+    <circle cx="100" cy="210" r="10" fill="#fff" stroke="#1976D2" stroke-width="2"/>
+    <text x="120" y="216" font-size="15" font-family="sans-serif" fill="#333">할 일 예시1 (인라인 편집)</text>
+    <rect x="420" y="200" width="38" height="20" rx="5" fill="#1976D2"/>
+    <text x="439" y="215" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#fff">수정</text>
+    <rect x="465" y="200" width="38" height="20" rx="5" fill="#D32F2F"/>
+    <text x="484" y="215" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#fff">삭제</text>
+    <rect x="510" y="200" width="38" height="20" rx="5" fill="#388E3C"/>
+    <text x="529" y="215" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#fff">완료</text>
+    <line x1="80" y1="250" x2="620" y2="250" stroke="#E0E0E0" stroke-width="1"/>
+    <circle cx="100" cy="240" r="10" fill="#fff" stroke="#1976D2" stroke-width="2"/>
+    <text x="120" y="246" font-size="15" font-family="sans-serif" fill="#333">할 일 예시2</text>
+    <rect x="420" y="230" width="38" height="20" rx="5" fill="#1976D2"/>
+    <text x="439" y="245" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#fff">수정</text>
+    <rect x="465" y="230" width="38" height="20" rx="5" fill="#D32F2F"/>
+    <text x="484" y="245" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#fff">삭제</text>
+    <rect x="510" y="230" width="38" height="20" rx="5" fill="#388E3C"/>
+    <text x="529" y="245" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#fff">완료</text>
+    <line x1="80" y1="280" x2="620" y2="280" stroke="#E0E0E0" stroke-width="1"/>
+    <circle cx="100" cy="270" r="10" fill="#fff" stroke="#1976D2" stroke-width="2"/>
+    <text x="120" y="276" font-size="15" font-family="sans-serif" fill="#333">할 일 예시3</text>
+    <rect x="420" y="260" width="38" height="20" rx="5" fill="#1976D2"/>
+    <text x="439" y="275" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#fff">수정</text>
+    <rect x="465" y="260" width="38" height="20" rx="5" fill="#D32F2F"/>
+    <text x="484" y="275" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#fff">삭제</text>
+    <rect x="510" y="260" width="38" height="20" rx="5" fill="#388E3C"/>
+    <text x="529" y="275" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#fff">완료</text>
+  </g>
+  <!-- Filter/Status Bar -->
+  <rect x="60" y="390" width="580" height="40" rx="10" fill="#ECEFF1"/>
+  <rect x="80" y="400" width="80" height="24" rx="6" fill="#1976D2"/>
+  <text x="120" y="417" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#fff">전체</text>
+  <rect x="170" y="400" width="80" height="24" rx="6" fill="#fff" stroke="#1976D2" stroke-width="1.5"/>
+  <text x="210" y="417" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#1976D2">미완료</text>
+  <rect x="260" y="400" width="80" height="24" rx="6" fill="#fff" stroke="#1976D2" stroke-width="1.5"/>
+  <text x="300" y="417" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#1976D2">완료</text>
+  <text x="600" y="417" font-size="13" font-family="sans-serif" text-anchor="end" fill="#1976D2">3개 남음</text>
+  <!-- Undo Snackbar -->
+  <rect x="400" y="470" width="220" height="30" rx="8" fill="#FFF3E0" stroke="#F57C00" stroke-width="1.5"/>
+  <text x="510" y="490" font-size="13" font-family="sans-serif" text-anchor="middle" fill="#F57C00">할 일이 삭제되었습니다. <tspan font-weight="bold">Undo</tspan></text>
+</svg>
