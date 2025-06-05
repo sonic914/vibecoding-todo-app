@@ -41,6 +41,7 @@
 ### 4.5 기타
 - 알림 기능, 외부 서비스 연동(캘린더, 메신저 등)은 필요 없음
 - 배포 환경은 AWS 기반
+- 프론트앤드와 CI/CD는 Github pages와 github actions를 사용한다.
 
 ## 5. 기술스택 정의
 - 프론트엔드: React
@@ -50,6 +51,15 @@
 - 백엔드: Node.js(Typescript)
 - 인프라: AWS CDK 서버리스(API Gateway + Lambda, DynamoDB)
 - 빌드도구: Vite
+
+## 6. 제약 사항
+- 브라우저 호환성: 최신 버전의 chrome, firefox, safari, edge 지원
+
+## 7. 마일스톤 및 우선순위
+1. 기본 TODO CRUD 기능 구현
+  - 처음에는 프론트만으로 동작하도록 구현하고 백엔드 구현이 되면 백엔드에 연결
+2. UI/UX 개선
+
 ---
 
 > 위 내용은 질문리스트에 대한 답변을 반영한 최종 요구사항 및 기술스택 정의입니다.
