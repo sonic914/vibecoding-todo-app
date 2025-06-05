@@ -1,6 +1,8 @@
 # TODO 웹 앱 요구사항 정의
 
 ## 1. 프로젝트 개요
+- 프론트엔드와 백엔드를 단일 저장소(모노레포)로 통합 관리한다.
+- 각 서비스는 `/frontend`, `/backend` 등으로 구분된 하위 디렉터리에 위치한다.
 - 간단한 TODO(할 일) 관리 웹 애플리케이션을 개발한다.
 - 사용자는 할 일을 추가, 수정, 삭제, 완료 처리할 수 있다.
 
@@ -35,8 +37,11 @@
 - AWS DynamoDB를 사용하여 데이터 영속성 확보
 
 ### 4.4 UI/UX
-- 반응형 디자인(모바일 및 데스크톱 지원)
-- 직관적이고 간단한 UI
+- 반응형 디자인(모바일 및 데스크탑 지원)
+- 직관적이고 간단한 UI (Mantine UI Kit 기반)
+- 모든 UI 컴포넌트(버튼, 입력폼 등)는 Mantine에서 제공하는 컴포넌트를 우선 활용
+- Mantine의 Theme, Color Scheme, Layout, Style props 등 적극 활용
+- 접근성(Accessibility) 및 다크모드 지원은 Mantine의 기본 기능을 적극 활용
 - 다크모드/라이트모드 지원
 - 접근성 고려(WCAG 2.1 AA 준수)
 - **상단 고정 헤더, 메인 영역에 할 일 목록 및 입력 폼, 하단에 필터/상태 표시**
@@ -52,8 +57,7 @@
 - 프론트앤드와 CI/CD는 Github pages와 github actions를 사용한다.
 
 ## 5. 기술스택 정의
-- 프론트엔드: React
-    - UI 라이브러리: TailwindCSS
+- 프론트엔드: React + Vite + Mantine UI Kit
     - 상태 관리: React Context + useReducer
     - 테스트: Jest, React Testing Library
 - 백엔드: Node.js(Typescript)
@@ -64,6 +68,25 @@
 - 브라우저 호환성: 최신 버전의 chrome, firefox, safari, edge 지원
 
 ## 7. 마일스톤 및 우선순위
+
+---
+
+## 8. 폴더 구조 예시 (Monorepo)
+
+```
+root/
+├── docs/
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   └── ...
+├── backend/
+│   ├── src/
+│   └── ...
+├── infra/
+└── ...
+```
+
 1. 기본 TODO CRUD 기능 구현
   - 처음에는 프론트만으로 동작하도록 구현하고 백엔드 구현이 되면 백엔드에 연결
 2. UI/UX 개선

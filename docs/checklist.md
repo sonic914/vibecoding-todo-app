@@ -1,14 +1,30 @@
 # TODO 웹앱 개발 체크리스트
 
-본 체크리스트는 설계 문서(design.md)와 요구사항에 기반하여, 실제 구현 및 커밋 단위를 명확히 관리하기 위한 가이드입니다.
+본 체크리스트는 설계 지침
+
+- UI 설계 시 Mantine의 컴포넌트 구조와 스타일 가이드를 준수한다.
+- 반응형(Responsive) UI 구현 시 Mantine의 Grid, MediaQuery 등 유틸리티를 활용한다.
+- 접근성(Accessibility) 및 다크모드 지원은 Mantine의 기본 기능을 적극 활용한다.
+
+문서(design.md)와 요구사항에 기반하여, 실제 구현 및 커밋 단위를 명확히 관리하기 위한 가이드입니다.
 
 ---
 
-## 1. 프로젝트 구조 및 환경 세팅
-- [ ] 프론트엔드/백엔드 폴더 구조 생성 및 초기화  
-  - 커밋: `chore: 프로젝트 폴더 및 기본 구조 생성`
-- [ ] 프론트엔드 개발 환경(Vite, React, TailwindCSS) 세팅  
-  - 커밋: `chore(frontend): Vite/React/TailwindCSS 환경 구축`
+## UI 구현 요건
+
+- 프론트엔드 UI는 [Mantine UI Kit](https://mantine.dev/)을 사용하여 구현한다.
+- 가능한 모든 UI 컴포넌트(버튼, 입력폼, 모달 등)는 Mantine에서 제공하는 컴포넌트를 우선적으로 활용한다.
+- Mantine의 Theme, Color Scheme, Layout 시스템을 적극 활용하여 일관된 UX를 제공한다.
+- 커스텀 디자인이 필요한 경우에도 Mantine의 스타일 시스템(Style props, Emotion 등)을 우선 활용한다.
+
+---
+
+## 1. 프로젝트 구조 및 환경 세팅 (Monorepo)
+- [ ] 모노레포(단일 저장소) 기반 프론트엔드/백엔드 폴더 구조 생성 및 초기화  
+  - 예시: `/frontend`, `/backend`, `/docs`, `/infra` 등
+  - 커밋: `chore: 모노레포 폴더 및 기본 구조 생성`
+- [ ] 프론트엔드 개발 환경(Vite, React, Mantine) 세팅  
+  - 커밋: `chore(frontend): Vite/React/Mantine 환경 구축`
 - [ ] 백엔드 개발 환경(Node.js, TypeScript, Jest) 세팅  
   - 커밋: `chore(backend): Node.js/TypeScript/Jest 환경 구축`
 - [ ] 공통 코드 컨벤션 및 린트 설정  

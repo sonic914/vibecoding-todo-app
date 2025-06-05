@@ -6,6 +6,8 @@
 
 ### 시스템 구성도 (SVG)
 
+> 본 프로젝트는 모노레포 구조로 관리되며, 프론트엔드와 백엔드가 하나의 저장소 내에서 분리된 디렉터리로 관리됩니다.
+
 ![시스템 구성도](./images/architecture.svg)
 
 <!--
@@ -38,7 +40,9 @@
 - **접근성**: 명확한 포커스, ARIA 속성, 색상 대비 준수
 
 ### 2.1 프론트엔드 (React)
-- **UI**: TailwindCSS 기반 반응형, 다크/라이트모드 지원
+- **UI**: Mantine UI Kit 기반 반응형, 다크/라이트모드 지원
+- 모든 UI 컴포넌트는 Mantine에서 제공하는 컴포넌트를 우선 활용하고, Theme, Color Scheme, Layout, Style props 등 Mantine의 기능을 적극 활용
+- 접근성(Accessibility) 및 다크모드 지원은 Mantine의 기본 기능을 적극 활용
 - **상태 관리**: React Context + useReducer
 - **인증**: AWS Cognito + Google OAuth 연동
 - **API 통신**: REST API (API Gateway)
@@ -63,7 +67,24 @@
 - **CI/CD**: GitHub Actions로 자동 빌드 및 테스트, 프론트엔드는 GitHub Pages로 배포
 - **S3/CloudFront**: (선택) 정적 웹 배포
 
-## 3. 폴더 구조 예시
+## 3. 폴더 구조 예시 (Monorepo)
+
+```
+root/
+├── docs/
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   └── ...
+├── backend/
+│   ├── src/
+│   └── ...
+├── infra/
+└── ...
+```
+
+- 프론트엔드와 백엔드는 단일 저장소 내에서 `/frontend`, `/backend`로 분리 관리
+- 공통 문서 및 인프라 코드는 docs, infra 등에 위치
 
 ```
 root/
@@ -95,7 +116,7 @@ root/
 ## 4. 주요 흐름 및 마일스톤
 
 1. **1단계: 프론트엔드 단독 TODO CRUD 구현**
-   - React + TailwindCSS로 UI/UX, 상태관리 구현
+   - React + Mantine UI Kit으로 UI/UX, 상태관리 구현
    - 브라우저 LocalStorage 기반 CRUD
    - GitHub Actions + Pages로 자동 배포
 2. **2단계: 백엔드 연동**
