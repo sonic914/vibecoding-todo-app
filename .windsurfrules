@@ -1,0 +1,188 @@
+# Windsurf Rules - TODO 웹 앱 개발 규칙
+
+## 기본 규칙
+
+- 커뮤니케이션은 한국어로 해줘
+- 프론트엔드 UI 구현시에는 실행코드를 먼저 작성. 코어 비즈니스 로직 구현은 TDD로 구현할 것
+- 백엔드는 TDD로 구현할 것
+- 커밋 전에 docs/checklist.md에 진행상황을 업데이트 할 것
+- 설계 변경시에는 requirements.md와 checklist.md를 수정할 것
+- 폴더를 생성할때에 README.md를 생성할 것
+
+본 문서는 Clean Architecture, TDD, SOLID 원칙을 기반으로 한 TODO 웹 앱 개발을 위한 통합 규칙 파일입니다. 모든 팀원은 위 기본 규칙과 함께 아래 규칙을 숙지하고 반드시 준수해야 합니다.
+
+## 분석 프로세스
+
+모든 개발 요청에 대해 다음 단계를 따릅니다:
+
+1. 요청 분석
+   - 작업 유형 파악 (코드 작성, 디버깅, 아키텍처 설계 등)
+   - 관련 언어 및 프레임워크 식별
+   - 명시적/암묵적 요구사항 파악
+   - 핵심 문제 및 원하는 결과 정의
+   - 프로젝트 컨텍스트 및 제약조건 고려
+
+2. 솔루션 계획
+   - 논리적 단계로 솔루션 분해
+   - 모듈화 및 재사용성 고려
+   - 필요한 파일 및 종속성 식별
+   - 대안 접근 방식 평가
+   - 테스트 및 검증 계획 수립
+
+3. 구현 전략
+   - 적절한 디자인 패턴 선택
+   - 성능 영향 고려
+   - 오류 처리 및 엣지 케이스 계획
+   - 접근성 준수 보장
+   - 모범 사례 정렬 확인
+
+## 커뮤니케이션 및 협업 원칙
+
+- 모든 커뮤니케이션은 한국어로 진행합니다.
+- 설계 변경 시 반드시 `docs/requirements.md`와 `docs/checklist.md`를 수정합니다.
+- 커밋 전에는 항상 `docs/checklist.md`에 진행상황을 업데이트합니다.
+- 폴더를 생성할 때에는 반드시 README.md를 함께 생성합니다.
+
+## 코드 스타일 및 구조
+
+### 일반 원칙
+
+- 간결하고 가독성 높은 TypeScript 코드 작성
+- 함수형 및 선언적 프로그래밍 패턴 사용
+- DRY(Don't Repeat Yourself) 원칙 준수
+- 가독성을 위한 조기 반환(early return) 구현
+- 컴포넌트 논리적 구조화: 내보내기, 하위 컴포넌트, 헬퍼, 타입
+
+### 명명 규칙
+
+- 설명적인 이름 사용 (isLoading, hasError)
+- 이벤트 핸들러에 "handle" 접두사 사용 (handleClick, handleSubmit)
+- 디렉토리는 소문자와 대시 사용 (components/auth-form)
+- 컴포넌트는 명명된 내보내기(named export) 선호
+
+### TypeScript 사용
+
+- 모든 코드에 TypeScript 사용
+- 타입보다 인터페이스 선호
+- enum 대신 const 맵 사용
+- 적절한 타입 안전성 및 추론 구현
+- 타입 검증에 `satisfies` 연산자 사용
+
+## 개발 프로세스
+
+- 프론트엔드 UI 구현 시에는 실행 코드를 먼저 작성합니다.
+- 코어 비즈니스 로직(프론트/백엔드)은 반드시 TDD(Test Driven Development)로 구현합니다.
+- 비즈니스 로직 구현 작업은 테스트를 먼저 작성한 후 구현합니다.
+- SOLID 원칙을 지키며 구현합니다.
+- Clean Architecture를 적용합니다.
+- Pulumi, CloudFormation 등 IaC 리소스의 Description은 반드시 영문으로 작성합니다.
+
+## React 및 프론트엔드 모범 사례
+
+### 컴포넌트 아키텍처
+
+- UI는 Mantine UI Kit 기반 컴포넌트 활용
+- 상태 관리는 React Context + useReducer 사용
+- 다크/라이트 모드 지원 및 접근성(WCAG 2.1 AA) 준수
+- 반응형 디자인으로 모바일/데스크탑 모두 최적화
+
+### 상태 관리
+
+- 프론트엔드 초기 구현 시 LocalStorage 사용
+- 백엔드 연동 시 DynamoDB로 전환
+- 상태 관리는 React Context + useReducer 사용
+- 클라이언트 측 상태 최소화
+
+## 백엔드 및 인프라 모범 사례
+
+### Clean Architecture 구현
+
+- 계층 분리: Presentation, Application, Domain, Infrastructure
+- Presentation: Lambda 핸들러
+- Application: UseCase(비즈니스 규칙)
+- Domain: Entity/Model
+- Infrastructure: DynamoDB 연동
+
+### AWS 서비스 활용
+
+- API Gateway: REST API 엔드포인트 관리
+- Lambda: 서버리스 백엔드 실행
+- DynamoDB: 할 일 데이터 저장
+- Cognito: 인증/인가 (Google OAuth)
+- CI/CD: GitHub Actions 기반 자동화
+
+## 코드 품질 원칙
+
+- 단순성: 복잡한 솔루션보다 가장 단순한 솔루션을 우선시합니다.
+- 중복 방지: 코드 중복을 피하고, 기존 기능을 재사용합니다(DRY 원칙).
+- 가드레일: 테스트 외에는 개발/프로덕션 환경에서 모의 데이터를 사용하지 않습니다.
+- 효율성: 명확성을 해치지 않는 선에서 토큰 사용을 최소화합니다.
+
+## 폴더 구조
+
+```text
+root/
+├── docs/
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── contexts/
+│   │   ├── reducers/
+│   │   ├── pages/
+│   │   ├── api/
+│   │   └── App.tsx
+│   ├── public/
+│   ├── tests/
+├── backend/
+│   ├── src/
+│   │   ├── application/
+│   │   ├── domain/
+│   │   ├── infrastructure/
+│   │   └── presentation/
+│   ├── tests/
+├── infra/
+│   └── cdk/
+└── .github/
+    └── workflows/
+```
+
+## 테스트 및 품질보증
+
+- 프론트엔드: Jest, React Testing Library 기반 단위/통합 테스트
+- 백엔드: Jest 기반 단위 테스트 및 TDD 필수
+- 모든 비즈니스 로직은 테스트 우선(TDD)로 작성
+- CI/CD: GitHub Actions 기반 자동화(빌드, 테스트, 배포)
+- 브라우저 호환성: 최신 Chrome, Firefox, Safari, Edge 지원
+
+## 문서화
+
+- 주요 컴포넌트 개발 후 `/docs/[component].md`에 요약 작성
+- 문서는 코드와 함께 항상 최신 상태로 유지
+- 복잡한 로직/알고리즘은 주석으로 설명
+- 간단한 다이어그램은 mermaid, 복잡한 아키텍처 다이어그램은 SVG 파일로 생성 후 문서에 포함
+
+## Git 커밋 및 버전 관리
+
+- `--no-verify` 옵션 사용 금지
+- 명확하고 일관된 커밋 메시지 작성
+- 적절한 크기로 커밋을 유지
+
+## 구현 마일스톤
+
+1. **1단계: 프론트엔드 단독 TODO CRUD 구현**
+   - React + Mantine UI Kit으로 UI/UX, 상태관리 구현
+   - 브라우저 LocalStorage 기반 CRUD
+   - GitHub Actions + Pages로 자동 배포
+
+2. **2단계: 백엔드 연동**
+   - AWS Cognito 인증(구글 OAuth)
+   - API Gateway + Lambda + DynamoDB 연동
+   - 프론트엔드에서 REST API 통신
+   - 데이터 저장소를 LocalStorage에서 DynamoDB로 전환
+
+3. **3단계: UI/UX 개선 및 접근성 강화**
+   - 반응형, 다크/라이트모드, 접근성 테스트
+
+---
+
+> 본 규칙은 `docs/design.md`, `docs/requirements.md`의 아키텍처 및 요구사항을 기반으로 작성되었습니다. 추가 요구/변경 사항은 본 문서에 반영해 주세요.

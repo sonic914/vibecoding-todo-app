@@ -23,6 +23,7 @@
 - [x] 모노레포(단일 저장소) 기반 프론트엔드/백엔드 폴더 구조 생성 및 초기화  
   - 예시: `/frontend`, `/backend`, `/docs`, `/infra` 등
   - 커밋: `chore: 모노레포 폴더 및 기본 구조 생성`
+  - 커밋: `chore: 기본 폴더 구조 및 .gitkeep 파일 추가`
 - [ ] 프론트엔드 개발 환경(Vite, React, Mantine) 세팅  
   - 커밋: `chore(frontend): Vite/React/Mantine 환경 구축`
 - [ ] 백엔드 개발 환경(Node.js, TypeScript, Jest) 세팅  
