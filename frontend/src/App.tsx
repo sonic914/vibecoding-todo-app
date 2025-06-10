@@ -1,5 +1,7 @@
-import { AppShell, Container, Title, Text, Group, ActionIcon, useMantineColorScheme, Stack, Button, Tooltip } from '@mantine/core';
-import { IconSun, IconMoon, IconArrowBackUp } from '@tabler/icons-react';
+import { AppShell, Container, Title, Text, Group, ActionIcon, useMantineColorScheme, Stack, Button, Tooltip, rem } from '@mantine/core';
+import { IconSun, IconMoon } from '@tabler/icons-react';
+import { useEffect } from 'react';
+import { loadThemeFromStorage, saveThemeToStorage, getSystemTheme } from '@/utils/themeUtils';
 import { TaskProvider, useTaskContext } from '@/contexts/taskContext/TaskContext';
 import { TaskForm } from '@/components/task/TaskForm';
 import { TaskFilter } from '@/components/task/TaskFilter';
@@ -13,14 +15,17 @@ const UndoButton = () => {
   const { canUndo } = state;
   
   return (
-    <Tooltip label="실행 취소" disabled={!canUndo}>
+    <Tooltip label={canUndo ? "이전 상태로 되돌리기" : "이전 상태가 없습니다"} disabled={!canUndo}>
       <Button
-        leftSection={<IconArrowBackUp size={16} />}
-        variant="light"
-        size="xs"
+        variant="filled"
+        size="md"
         onClick={undo}
         disabled={!canUndo}
         aria-label="실행 취소"
+        className="fade-in"
+        data-testid="undo-button"
+        style={{ minWidth: '200px' }}
+        color="blue"
       >
         실행 취소
       </Button>
@@ -34,30 +39,47 @@ const UndoButton = () => {
 function App() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
 
+  // 초기 테마 설정 로드
+  useEffect(() => {
+    const savedTheme = loadThemeFromStorage();
+    if (savedTheme) {
+      setColorScheme(savedTheme);
+    } else {
+      // 저장된 테마가 없으면 시스템 테마 사용
+      setColorScheme(getSystemTheme());
+    }
+  }, [setColorScheme]);
+
   const toggleColorScheme = () => {
-    setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
+    const newColorScheme = colorScheme === 'dark' ? 'light' : 'dark';
+    setColorScheme(newColorScheme);
+    saveThemeToStorage(newColorScheme);
   };
 
   return (
     <TaskProvider>
       <AppShell header={{ height: 60 }}>
         <AppShell.Header>
-          <Container size="lg" h="100%">
-            <Group justify="space-between" h="100%">
-              <Title order={1} size="h3">TODO 앱</Title>
-              <ActionIcon 
-                variant="subtle" 
-                onClick={toggleColorScheme} 
-                aria-label="테마 전환"
-              >
-                {colorScheme === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
-              </ActionIcon>
+          <Container size="lg" h="100%" className="responsive-container">
+            <Group justify="space-between" h="100%" wrap="nowrap">
+              <Title order={1} size="h3" style={{ whiteSpace: 'nowrap' }}>TODO 앱</Title>
+              <Tooltip label={colorScheme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'}>
+                <ActionIcon 
+                  variant="subtle" 
+                  onClick={toggleColorScheme} 
+                  aria-label="테마 전환"
+                  size="lg"
+                  className="btn-effect"
+                >
+                  {colorScheme === 'dark' ? <IconSun size={rem(18)} /> : <IconMoon size={rem(18)} />}
+                </ActionIcon>
+              </Tooltip>
             </Group>
           </Container>
         </AppShell.Header>
 
         <AppShell.Main>
-          <Container size="lg" py="xl">
+          <Container size="lg" className="responsive-container">
             <Stack gap="md">
               <div>
                 <Title order={2} mb="md">할 일 관리</Title>
@@ -70,14 +92,16 @@ function App() {
               {/* 할 일 추가 폼 */}
               <TaskForm />
               
-              {/* 할 일 필터링 및 Undo 버튼 */}
-              <Group justify="space-between" align="center">
-                <TaskFilter />
-                <UndoButton />
-              </Group>
+              {/* 할 일 필터링 */}
+              <TaskFilter />
               
               {/* 할 일 목록 */}
               <TaskList />
+              
+              {/* 실행 취소 버튼 */}
+              <Group justify="center" mt="md">
+                <UndoButton />
+              </Group>
             </Stack>
           </Container>
         </AppShell.Main>

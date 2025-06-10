@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Paper, TextInput, Button, Group, Stack, Select } from '@mantine/core';
+import { Paper, TextInput, Button, Group, Stack, Select, Transition } from '@mantine/core';
 import { useTaskContext } from '@/contexts/taskContext/TaskContext';
 import { TaskFactory } from '@/domain/task/TaskFactory';
 import { TaskStatus } from '@/domain/task/Task';
@@ -42,42 +42,56 @@ export const TaskForm: React.FC = () => {
   };
 
   return (
-    <Paper shadow="xs" p="md" withBorder mb="md">
-      <form onSubmit={handleSubmit} data-testid="task-form">
-        <Stack>
-          <TextInput
-            label="할 일"
-            placeholder="할 일을 입력하세요"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            data-testid="task-title-input"
-          />
-          
-          <Select
-            label="상태"
-            value={status}
-            onChange={(value) => setStatus(value as TaskStatus)}
-            data={[
-              { value: TaskStatus.TODO, label: '할 일' },
-              { value: TaskStatus.IN_PROGRESS, label: '진행 중' },
-              { value: TaskStatus.DONE, label: '완료' }
-            ]}
-            data-testid="task-status-select"
-          />
-          
-          <Group justify="flex-end">
-            <Button
-              type="submit"
-              disabled={!title.trim() || isSubmitting}
-              loading={isSubmitting}
-              data-testid="task-submit-btn"
-            >
-              할 일 추가
-            </Button>
-          </Group>
-        </Stack>
-      </form>
-    </Paper>
+    <Transition mounted={true} transition="fade" duration={300} timingFunction="ease">
+      {(styles) => (
+        <Paper shadow="xs" p="md" withBorder mb="md" style={styles}>
+          <form onSubmit={handleSubmit} data-testid="task-form">
+            <Stack>
+              <TextInput
+                label="할 일"
+                placeholder="할 일을 입력하세요"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                data-testid="task-title-input"
+                aria-label="할 일 제목"
+                autoComplete="off"
+                size="md"
+              />
+              
+              <Select
+                label="상태"
+                value={status}
+                onChange={(value) => setStatus(value as TaskStatus)}
+                data={[
+                  { value: TaskStatus.TODO, label: '할 일' },
+                  { value: TaskStatus.IN_PROGRESS, label: '진행 중' },
+                  { value: TaskStatus.DONE, label: '완료' }
+                ]}
+                data-testid="task-status-select"
+                aria-label="할 일 상태"
+                clearable={false}
+                size="md"
+              />
+              
+              <Group justify="flex-end" mt="md">
+                <Button
+                  type="submit"
+                  disabled={!title.trim() || isSubmitting}
+                  loading={isSubmitting}
+                  data-testid="task-submit-btn"
+                  size="md"
+                  variant="filled"
+                  color="blue"
+                  fullWidth
+                >
+                  할 일 추가
+                </Button>
+              </Group>
+            </Stack>
+          </form>
+        </Paper>
+      )}
+    </Transition>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Group, SegmentedControl, TextInput, Button, Paper } from '@mantine/core';
-import { IconSearch, IconFilterOff } from '@tabler/icons-react';
+import { Group, SegmentedControl, TextInput, Button, Paper, Stack, rem } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
+import { IconSearch } from '@tabler/icons-react';
 import { useTaskContext } from '@/contexts/taskContext/TaskContext';
 import { TaskStatus } from '@/domain/task/Task';
 
@@ -49,53 +50,136 @@ export const TaskFilter: React.FC = () => {
     setSearchTerm('');
   };
 
+  // 모바일 화면 여부 확인
+  const isMobile = useMediaQuery('(max-width: 48em)');
+
   return (
-    <Paper shadow="xs" p="md" withBorder mb="md">
-      <Group align="flex-end" justify="space-between">
-        <SegmentedControl
-          value={status}
-          onChange={setStatus}
-          data={[
-            { label: '전체', value: '' },
-            { label: '할 일', value: TaskStatus.TODO },
-            { label: '진행 중', value: TaskStatus.IN_PROGRESS },
-            { label: '완료', value: TaskStatus.DONE }
-          ]}
-          data-testid="task-status-filter"
-        />
-        
-        <form onSubmit={handleSearchSubmit} style={{ flexGrow: 1, marginLeft: 16 }}>
-          <Group>
-            <TextInput
-              placeholder="검색어 입력"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ flexGrow: 1 }}
-              rightSection={
-                <Button 
-                  type="submit" 
-                  variant="subtle" 
-                  size="xs"
-                  aria-label="검색"
-                >
-                  <IconSearch size={16} />
-                </Button>
+    <Paper shadow="xs" p="md" withBorder mb="md" style={{ width: '100%' }}>
+      {!isMobile ? (
+        // 데스크톱 뷰
+        <Group align="flex-end" justify="space-between">
+          <SegmentedControl
+            value={status}
+            onChange={setStatus}
+            data={[
+              { label: '전체', value: '' },
+              { label: '할 일', value: TaskStatus.TODO },
+              { label: '진행 중', value: TaskStatus.IN_PROGRESS },
+              { label: '완료', value: TaskStatus.DONE }
+            ]}
+            data-testid="task-status-filter"
+            aria-label="상태 필터"
+            size="sm"
+            styles={() => ({
+              root: {
+                borderRadius: '4px',
+              },
+              indicator: {
+                borderRadius: '3px',
+              },
+              label: {
+                fontWeight: 500,
               }
-              data-testid="task-search-input"
-            />
-            
-            <Button
-              variant="light"
-              leftSection={<IconFilterOff size={16} />}
-              onClick={handleClearFilter}
-              aria-label="필터 초기화"
-              data-testid="task-filter-clear-btn"
-            >
-              초기화
-            </Button>
-          </Group>
-        </form>
-      </Group>
+            })}
+          />
+          
+          <form onSubmit={handleSearchSubmit} style={{ flexGrow: 1, marginLeft: 16 }}>
+            <Group>
+              <TextInput
+                placeholder="검색어 입력"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ flexGrow: 1 }}
+                rightSection={
+                  <Button 
+                    type="submit" 
+                    variant="subtle" 
+                    size="xs"
+                    aria-label="검색"
+                  >
+                    <IconSearch size={rem(16)} />
+                  </Button>
+                }
+                data-testid="task-search-input"
+                aria-label="할 일 검색"
+              />
+              
+              <Button
+                variant="light"
+                onClick={handleClearFilter}
+                aria-label="필터 초기화"
+                data-testid="task-filter-clear-btn"
+                size="sm"
+                style={{ minWidth: '100px' }}
+              >
+                초기화
+              </Button>
+            </Group>
+          </form>
+        </Group>
+      ) : (
+        // 모바일 뷰
+        <Stack gap="md">
+          <SegmentedControl
+            value={status}
+            onChange={setStatus}
+            data={[
+              { label: '전체', value: '' },
+              { label: '할 일', value: TaskStatus.TODO },
+              { label: '진행 중', value: TaskStatus.IN_PROGRESS },
+              { label: '완료', value: TaskStatus.DONE }
+            ]}
+            data-testid="task-status-filter-mobile"
+            aria-label="상태 필터"
+            fullWidth
+            size="sm"
+            styles={() => ({
+              root: {
+                borderRadius: '4px',
+              },
+              indicator: {
+                borderRadius: '3px',
+              },
+              label: {
+                fontWeight: 500,
+              }
+            })}
+          />
+          
+          <form onSubmit={handleSearchSubmit} style={{ width: '100%' }}>
+            <Stack gap="xs">
+              <TextInput
+                placeholder="검색어 입력"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                rightSection={
+                  <Button 
+                    type="submit" 
+                    variant="subtle" 
+                    size="xs"
+                    aria-label="검색"
+                  >
+                    <IconSearch size={rem(16)} />
+                  </Button>
+                }
+                data-testid="task-search-input-mobile"
+                aria-label="할 일 검색"
+              />
+              
+              <Button
+                variant="light"
+                onClick={handleClearFilter}
+                aria-label="필터 초기화"
+                data-testid="task-filter-clear-btn-mobile"
+                fullWidth
+                size="xs"
+              >
+                필터 초기화
+              </Button>
+            </Stack>
+          </form>
+        </Stack>
+      )}
     </Paper>
   );
 };
