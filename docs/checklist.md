@@ -20,7 +20,7 @@
 ---
 
 ## 1. 프로젝트 구조 및 환경 세팅 (Monorepo)
-- [ ] 모노레포(단일 저장소) 기반 프론트엔드/백엔드 폴더 구조 생성 및 초기화  
+- [x] 모노레포(단일 저장소) 기반 프론트엔드/백엔드 폴더 구조 생성 및 초기화  
   - 예시: `/frontend`, `/backend`, `/docs`, `/infra` 등
   - 커밋: `chore: 모노레포 폴더 및 기본 구조 생성`
 - [ ] 프론트엔드 개발 환경(Vite, React, Mantine) 세팅  
@@ -29,6 +29,8 @@
   - 커밋: `chore(backend): Node.js/TypeScript/Jest 환경 구축`
 - [ ] 공통 코드 컨벤션 및 린트 설정  
   - 커밋: `chore: 린트/포맷터/공통 설정 추가`
+- [x] 프로젝트 규칙 파일(windsurfrules.md) 생성  
+  - 커밋: `docs: 프로젝트 규칙 파일(windsurfrules.md) 생성`
 
 ---
 
