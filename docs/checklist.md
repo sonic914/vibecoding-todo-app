@@ -24,7 +24,7 @@
   - 예시: `/frontend`, `/backend`, `/docs`, `/infra` 등
   - 커밋: `chore: 모노레포 폴더 및 기본 구조 생성`
   - 커밋: `chore: 기본 폴더 구조 및 .gitkeep 파일 추가`
-- [ ] 프론트엔드 개발 환경(Vite, React, Mantine) 세팅  
+- [x] 프론트엔드 개발 환경(Vite, React, Mantine) 세팅  
   - 커밋: `chore(frontend): Vite/React/Mantine 환경 구축`
 - [ ] 백엔드 개발 환경(Node.js, TypeScript, Jest) 세팅  
   - 커밋: `chore(backend): Node.js/TypeScript/Jest 환경 구축`
@@ -36,11 +36,11 @@
 ---
 
 ## 2. 프론트엔드: TODO 상태관리 및 로컬스토리지 CRUD (TDD)
-- [ ] **할 일(Task) 엔티티/타입 정의**  
+- [x] **할 일(Task) 엔티티/타입 정의**  
   - 커밋: `feat(frontend): 할 일(Task) 타입/엔티티 정의`
-- [ ] **상태관리 로직(useReducer) 테스트 코드 작성**  
+- [x] **상태관리 로직(useReducer) 테스트 코드 작성**  
   - 커밋: `test(frontend): useReducer 상태관리 테스트 추가`
-- [ ] **상태관리 리듀서/액션 구현**  
+- [x] **상태관리 리듀서/액션 구현**  
   - 커밋: `feat(frontend): useReducer 기반 상태관리 구현`
 - [ ] **LocalStorage 연동 유틸 테스트 코드 작성**  
   - 커밋: `test(frontend): LocalStorage 유틸 테스트 추가`
