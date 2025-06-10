@@ -42,9 +42,9 @@
   - 커밋: `test(frontend): useReducer 상태관리 테스트 추가`
 - [x] **상태관리 리듀서/액션 구현**  
   - 커밋: `feat(frontend): useReducer 기반 상태관리 구현`
-- [ ] **LocalStorage 연동 유틸 테스트 코드 작성**  
+- [x] **LocalStorage 연동 유틸 테스트 코드 작성**  
   - 커밋: `test(frontend): LocalStorage 유틸 테스트 추가`
-- [ ] **LocalStorage 연동 유틸 구현**  
+- [x] **LocalStorage 연동 유틸 구현**  
   - 커밋: `feat(frontend): LocalStorage 연동 구현`
 - [ ] **할 일 CRUD(추가/수정/삭제/완료/미완료) 기능 테스트 코드 작성**  
   - 커밋: `test(frontend): 할 일 CRUD 테스트 추가`
