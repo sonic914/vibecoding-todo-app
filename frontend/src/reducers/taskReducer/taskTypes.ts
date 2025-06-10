@@ -8,6 +8,16 @@ export interface TaskState {
   isLoading: boolean;
   error: string | null;
   filter: TaskFilter;
+  undoStack: UndoStackItem[];
+  canUndo: boolean;
+}
+
+/**
+ * Undo 스택에 저장되는 작업 아이템
+ */
+export interface UndoStackItem {
+  action: any;
+  previousState: Partial<TaskState>;
 }
 
 /**
@@ -27,5 +37,7 @@ export const initialTaskState: TaskState = {
   tasks: [],
   isLoading: false,
   error: null,
-  filter: {}
+  filter: {},
+  undoStack: [],
+  canUndo: false
 };

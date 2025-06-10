@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
 import { taskReducer } from '../../reducers/taskReducer/taskReducer';
 import { initialTaskState, TaskState } from '../../reducers/taskReducer/taskTypes';
 import { Task, UpdateTaskDTO } from '../../domain/task/Task';
@@ -12,8 +12,11 @@ import {
   fetchTasksRequest as fetchTasksRequestAction,
   fetchTasksSuccess as fetchTasksSuccessAction,
   fetchTasksFailure as fetchTasksFailureAction,
+  recordActionAction,
+  undoAction,
   TaskFilter
 } from '../../reducers/taskReducer/taskActions';
+import { saveToStorage, getFromStorage, StorageKeys, isStorageAvailable } from '../../utils/storage/LocalStorageUtils';
 
 /**
  * 할 일 컨텍스트에서 제공하는 기능들의 인터페이스
@@ -27,6 +30,7 @@ interface TaskContextType {
   fetchTasks: () => Promise<void>;
   setFilter: (filter: TaskFilter) => void;
   clearFilter: () => void;
+  undo: () => void;
 }
 
 /**
@@ -55,28 +59,47 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
    * 할 일 추가 함수
    */
   const addTask = (task: Task) => {
+    // 현재 상태를 저장하고 액션 실행
+    const previousState = { tasks: [...state.tasks] };
     dispatch(addTaskAction(task));
+    // 실행한 액션과 이전 상태 기록
+    dispatch(recordActionAction(addTaskAction(task), previousState));
   };
 
   /**
    * 할 일 업데이트 함수
    */
   const updateTask = (id: string, updates: UpdateTaskDTO) => {
+    const previousState = { tasks: [...state.tasks] };
     dispatch(updateTaskAction(id, updates));
+    dispatch(recordActionAction(updateTaskAction(id, updates), previousState));
   };
 
   /**
    * 할 일 삭제 함수
    */
   const deleteTask = (id: string) => {
+    const previousState = { tasks: [...state.tasks] };
     dispatch(deleteTaskAction(id));
+    dispatch(recordActionAction(deleteTaskAction(id), previousState));
   };
 
   /**
    * 할 일 완료 함수
    */
   const completeTask = (id: string) => {
+    const previousState = { tasks: [...state.tasks] };
     dispatch(completeTaskAction(id));
+    dispatch(recordActionAction(completeTaskAction(id), previousState));
+  };
+  
+  /**
+   * 실행 취소 함수
+   */
+  const undo = () => {
+    if (state.canUndo) {
+      dispatch(undoAction());
+    }
   };
 
   /**
@@ -87,12 +110,21 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
     dispatch(fetchTasksRequestAction());
     
     try {
+      // 로컬 스토리지 사용 가능 여부 확인
+      if (!isStorageAvailable()) {
+        throw new Error('로컬 스토리지를 사용할 수 없습니다.');
+      }
+      
       // 로컬 스토리지에서 할 일 목록 가져오기
-      const tasksJson = localStorage.getItem('tasks');
-      const tasks = tasksJson ? JSON.parse(tasksJson) : [];
+      const tasks = getFromStorage<Task[]>(StorageKeys.TASKS, []);
+      
+      if (!tasks) {
+        dispatch(fetchTasksSuccessAction([]));
+        return;
+      }
       
       // 날짜 객체로 변환
-      const parsedTasks = tasks.map((task: any) => ({
+      const parsedTasks = tasks.map((task: Task) => ({
         ...task,
         createdAt: new Date(task.createdAt),
         updatedAt: new Date(task.updatedAt),
@@ -121,11 +153,31 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
   };
 
   // 상태가 변경될 때마다 로컬 스토리지에 저장
-  React.useEffect(() => {
+  useEffect(() => {
+    // 로컬 스토리지 사용 가능 여부 확인
+    if (!isStorageAvailable()) {
+      console.error('로컬 스토리지를 사용할 수 없습니다.');
+      return;
+    }
+    
+    // 할 일 목록이 비어있지 않은 경우에만 저장
     if (state.tasks.length > 0) {
-      localStorage.setItem('tasks', JSON.stringify(state.tasks));
+      saveToStorage(StorageKeys.TASKS, state.tasks);
     }
   }, [state.tasks]);
+  
+  // 필터 상태가 변경될 때마다 로컬 스토리지에 저장
+  useEffect(() => {
+    if (isStorageAvailable() && state.filter) {
+      saveToStorage(StorageKeys.FILTER, state.filter);
+    }
+  }, [state.filter]);
+  
+  // 컴포넌트 마운트 시 로컬 스토리지에서 할 일 목록 불러오기
+  useEffect(() => {
+    fetchTasks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const contextValue: TaskContextType = {
     state,
@@ -135,7 +187,8 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
     completeTask,
     fetchTasks,
     setFilter,
-    clearFilter
+    clearFilter,
+    undo
   };
 
   return (

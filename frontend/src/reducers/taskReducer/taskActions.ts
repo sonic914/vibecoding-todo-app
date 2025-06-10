@@ -1,5 +1,10 @@
-import { Task, CreateTaskDTO, UpdateTaskDTO } from '../../domain/task/Task';
-import { TaskFilter } from './taskTypes';
+import { Task, UpdateTaskDTO } from '../../domain/task/Task';
+import { TaskFilter as TaskFilterType } from './taskTypes';
+
+/**
+ * TaskFilter 타입을 재내보내기
+ */
+export type TaskFilter = TaskFilterType;
 
 /**
  * 할 일 관련 액션 타입 상수
@@ -13,7 +18,9 @@ export const TASK_ACTION_TYPES = {
   FETCH_TASKS_SUCCESS: 'FETCH_TASKS_SUCCESS',
   FETCH_TASKS_FAILURE: 'FETCH_TASKS_FAILURE',
   SET_FILTER: 'SET_FILTER',
-  CLEAR_FILTER: 'CLEAR_FILTER'
+  CLEAR_FILTER: 'CLEAR_FILTER',
+  RECORD_ACTION: 'RECORD_ACTION',
+  UNDO: 'UNDO'
 } as const;
 
 /**
@@ -28,7 +35,9 @@ export type TaskAction =
   | FetchTasksSuccessAction
   | FetchTasksFailureAction
   | SetFilterAction
-  | ClearFilterAction;
+  | ClearFilterAction
+  | RecordActionAction
+  | UndoAction;
 
 /**
  * 할 일 추가 액션 인터페이스
@@ -104,6 +113,24 @@ export interface ClearFilterAction {
 }
 
 /**
+ * 작업 기록 액션 인터페이스
+ */
+export interface RecordActionAction {
+  type: typeof TASK_ACTION_TYPES.RECORD_ACTION;
+  payload: {
+    action: TaskAction;
+    previousState: any;
+  };
+}
+
+/**
+ * 실행 취소 액션 인터페이스
+ */
+export interface UndoAction {
+  type: typeof TASK_ACTION_TYPES.UNDO;
+}
+
+/**
  * 할 일 추가 액션 생성 함수
  */
 export const addTask = (task: Task): AddTaskAction => ({
@@ -167,8 +194,28 @@ export const setFilter = (filter: TaskFilter): SetFilterAction => ({
 });
 
 /**
- * 필터 초기화 액션 생성 함수
+ * 필터 초기화 액션 생성자
  */
 export const clearFilter = (): ClearFilterAction => ({
   type: TASK_ACTION_TYPES.CLEAR_FILTER
+});
+
+/**
+ * 작업 기록 액션 생성자
+ * @param action 기록할 액션
+ * @param previousState 이전 상태
+ */
+export const recordActionAction = (action: TaskAction, previousState: any): RecordActionAction => ({
+  type: TASK_ACTION_TYPES.RECORD_ACTION,
+  payload: {
+    action,
+    previousState
+  }
+});
+
+/**
+ * 실행 취소 액션 생성자
+ */
+export const undoAction = (): UndoAction => ({
+  type: TASK_ACTION_TYPES.UNDO
 });

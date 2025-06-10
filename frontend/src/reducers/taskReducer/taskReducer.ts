@@ -1,5 +1,5 @@
 import { TaskAction, TASK_ACTION_TYPES } from './taskActions';
-import { TaskState, initialTaskState } from './taskTypes';
+import { TaskState, initialTaskState, UndoStackItem } from './taskTypes';
 import { TaskStatus } from '../../domain/task/Task';
 
 /**
@@ -111,6 +111,48 @@ export const taskReducer = (
         ...state,
         filter: {}
       };
+
+    case TASK_ACTION_TYPES.RECORD_ACTION: {
+      const { action: recordedAction, previousState } = action.payload;
+      // 실행 취소 가능한 액션만 저장 (RECORD_ACTION과 UNDO 자체는 제외)
+      const undoableActionTypes = [
+        TASK_ACTION_TYPES.ADD_TASK,
+        TASK_ACTION_TYPES.UPDATE_TASK,
+        TASK_ACTION_TYPES.DELETE_TASK,
+        TASK_ACTION_TYPES.COMPLETE_TASK
+      ] as const;
+      
+      if (!recordedAction || !undoableActionTypes.includes(recordedAction.type as any)) {
+        return state;
+      }
+      
+      const newUndoStack: UndoStackItem[] = [
+        { action: recordedAction, previousState },
+        ...state.undoStack
+      ].slice(0, 10); // 최대 10개 작업만 저장
+      
+      return {
+        ...state,
+        undoStack: newUndoStack,
+        canUndo: true
+      };
+    }
+    
+    case TASK_ACTION_TYPES.UNDO: {
+      if (state.undoStack.length === 0) {
+        return state;
+      }
+      
+      const [lastAction, ...remainingStack] = state.undoStack;
+      const { previousState } = lastAction;
+      
+      return {
+        ...state,
+        ...previousState,
+        undoStack: remainingStack,
+        canUndo: remainingStack.length > 0
+      };
+    }
       
     default:
       return state;

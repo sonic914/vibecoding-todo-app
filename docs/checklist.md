@@ -46,15 +46,21 @@
   - 커밋: `test(frontend): LocalStorage 유틸 테스트 추가`
 - [x] **LocalStorage 연동 유틸 구현**  
   - 커밋: `feat(frontend): LocalStorage 연동 구현`
-- [ ] **할 일 CRUD(추가/수정/삭제/완료/미완료) 기능 테스트 코드 작성**  
+- [x] **TaskContext에 LocalStorage 연동 테스트 추가**  
+  - 커밋: `test(frontend): TaskContext에 LocalStorage 연동 테스트 추가`
+- [x] **TaskContext에 LocalStorage 연동 기능 구현**  
+  - 커밋: `feat(frontend): TaskContext에 LocalStorage 연동 기능 구현`
+- [~] **할 일 CRUD(추가/수정/삭제/완료/미완료) 기능 테스트 코드 작성**  
   - 커밋: `test(frontend): 할 일 CRUD 테스트 추가`
-- [ ] **할 일 CRUD 기능 구현**  
+- [x] **할 일 CRUD 기능 구현**  
   - 커밋: `feat(frontend): 할 일 CRUD 기능 구현`
 
 ---
 
 ## 3. 프론트엔드: UI/UX 컴포넌트 및 기능 구현
-- [ ] 입력폼, 리스트뷰, 필터, Undo, 다크/라이트모드, 접근성 등 UI/UX 컴포넌트 구현  
+- [x] **Undo 기능 구현**  
+  - 커밋: `feat(frontend): Undo 기능 구현`
+- [ ] 입력폼, 리스트뷰, 필터, 다크/라이트모드, 접근성 등 UI/UX 컴포넌트 구현  
   - 커밋: `feat(frontend): UI/UX 컴포넌트 및 기능 구현`
 
 ---
