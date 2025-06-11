@@ -2,7 +2,7 @@ name: Deploy Frontend to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - 'frontend/**'
   # 수동으로 워크플로우를 실행할 수 있도록 설정
