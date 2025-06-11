@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Paper, Group, Text, ActionIcon, Badge, Stack, TextInput, Button, Tooltip, useMantineColorScheme, rem } from '@mantine/core';
+import { Paper, Group, Text, ActionIcon, Badge, Stack, TextInput, Button, Tooltip, useMantineColorScheme, rem, Flex } from '@mantine/core';
 import { IconEdit, IconTrash, IconCheck, IconX, IconDeviceFloppy } from '@tabler/icons-react';
 import { useTaskContext } from '@/contexts/taskContext/TaskContext';
 import { Task, TaskStatus, UpdateTaskDTO } from '@/domain/task/Task';
@@ -86,26 +86,25 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, index = 0 }) => {
             data-testid="task-edit-input"
             aria-label="할 일 제목 수정"
           />
-          <Group justify="flex-end">
+          <Flex gap="sm" justify="flex-end" mt="md">
             <Button
-              variant="outline"
-              color="gray"
-              leftSection={<IconX size={rem(16)} />}
+              variant="default"
               onClick={handleEditCancel}
+              leftSection={<IconX size={14} />}
               aria-label="수정 취소"
               data-testid="task-edit-cancel-btn"
             >
               취소
             </Button>
             <Button
-              leftSection={<IconDeviceFloppy size={rem(16)} />}
               onClick={handleEditSave}
+              leftSection={<IconDeviceFloppy size={14} />}
               aria-label="수정 저장"
               data-testid="task-edit-save-btn"
             >
               저장
             </Button>
-          </Group>
+          </Flex>
         </Stack>
       </Paper>
     );
