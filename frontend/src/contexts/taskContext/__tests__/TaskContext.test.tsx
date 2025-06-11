@@ -2,7 +2,14 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { TaskProvider, useTaskContext } from '@/contexts/taskContext/TaskContext';
 import { TaskFactory } from '@/domain/task/TaskFactory';
-import { TaskStatus, Task } from '@/domain/task/Task';
+import { TaskStatus } from '@/domain/task/Task';
+
+// 테스트에서 사용할 최소한의 Task 인터페이스 정의
+interface TaskLike {
+  id: string;
+  title: string;
+  status: string;
+}
 import { StorageKeys } from '@/utils/storage/LocalStorageUtils';
 
 // 테스트용 컴포넌트
@@ -43,7 +50,7 @@ const TestComponent: React.FC = () => {
   return (
     <div>
       <div data-testid="task-count">{state.tasks.length}</div>
-      {state.tasks.map((task: Task) => (
+      {state.tasks.map((task: TaskLike) => (
         <div key={task.id} data-testid="task-item">
           <span data-testid="task-title">{task.title}</span>
           <span data-testid="task-status">{task.status}</span>
@@ -233,7 +240,7 @@ describe('TaskContext', () => {
       try {
         const savedData = JSON.parse(savedDataStr);
         expect(Array.isArray(savedData)).toBe(true);
-        expect(savedData.some((task: Task) => task.title === '테스트 할 일')).toBe(true);
+        expect(savedData.some((task: TaskLike) => task.title === '테스트 할 일')).toBe(true);
       } catch (e) {
         fail(`유효한 JSON이 아닙니다: ${savedDataStr}`);
       }
@@ -265,7 +272,7 @@ describe('TaskContext', () => {
       try {
         const savedData = JSON.parse(savedDataStr);
         expect(Array.isArray(savedData)).toBe(true);
-        expect(savedData.some((task: Task) => task.title === '업데이트된 할 일')).toBe(true);
+        expect(savedData.some((task: TaskLike) => task.title === '업데이트된 할 일')).toBe(true);
       } catch (e) {
         fail(`유효한 JSON이 아닙니다: ${savedDataStr}`);
       }
