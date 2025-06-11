@@ -68,7 +68,7 @@
 ## 4. 프론트엔드: GitHub Actions + Pages 배포 자동화
 - [x] GitHub Actions 워크플로우 작성  
   - 커밋: `ci(frontend): GitHub Actions 배포 자동화`
-- [ ] GitHub Pages 배포 테스트  
+- [x] GitHub Pages 배포 테스트  
   - 커밋: `docs: 프론트엔드 배포 테스트/결과 기록`
 
 ---
