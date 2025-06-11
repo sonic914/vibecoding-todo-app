@@ -18,7 +18,7 @@ export const TaskList: React.FC = () => {
       return tasks;
     }
 
-    return tasks.filter(task => {
+    return tasks.filter((task: Task) => {
       // 상태 필터링
       if (filter.status !== undefined && task.status !== filter.status) {
         return false;

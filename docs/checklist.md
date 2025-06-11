@@ -26,9 +26,9 @@
   - 커밋: `chore: 기본 폴더 구조 및 .gitkeep 파일 추가`
 - [x] 프론트엔드 개발 환경(Vite, React, Mantine) 세팅  
   - 커밋: `chore(frontend): Vite/React/Mantine 환경 구축`
-- [ ] 백엔드 개발 환경(Node.js, TypeScript, Jest) 세팅  
+- [x] 백엔드 개발 환경(Node.js, TypeScript, Jest) 세팅  
   - 커밋: `chore(backend): Node.js/TypeScript/Jest 환경 구축`
-- [ ] 공통 코드 컨벤션 및 린트 설정  
+- [x] 공통 코드 컨벤션 및 린트 설정  
   - 커밋: `chore: 린트/포맷터/공통 설정 추가`
 - [x] 프로젝트 규칙 파일(windsurfrules.md) 생성  
   - 커밋: `docs: 프로젝트 규칙 파일(windsurfrules.md) 생성`
@@ -74,20 +74,20 @@
 ---
 
 ## 5. 백엔드: Clean Architecture 기반 Lambda API (TDD)
-- [ ] **Domain: 할 일 엔티티/모델 정의 및 테스트**  
+- [x] **Domain: 할 일 엔티티/모델 정의 및 테스트**  
   - 커밋: `test(backend): Domain 엔티티/모델 테스트 추가`
   - 커밋: `feat(backend): Domain 엔티티/모델 구현`
-- [ ] **Application: UseCase(비즈니스 로직) 테스트 코드 작성**  
+- [x] **Application: UseCase(비즈니스 로직) 테스트 코드 작성**  
   - 커밋: `test(backend): UseCase 테스트 추가`
-- [ ] **Application: UseCase(비즈니스 로직) 구현**  
+- [x] **Application: UseCase(비즈니스 로직) 구현**  
   - 커밋: `feat(backend): UseCase 구현`
-- [ ] **Infrastructure: DynamoDB 연동 레포지토리 테스트 코드 작성**  
+- [x] **Infrastructure: DynamoDB 연동 레포지토리 테스트 코드 작성**  
   - 커밋: `test(backend): DynamoDB 레포지토리 테스트 추가`
-- [ ] **Infrastructure: DynamoDB 연동 레포지토리 구현**  
+- [x] **Infrastructure: DynamoDB 연동 레포지토리 구현**  
   - 커밋: `feat(backend): DynamoDB 레포지토리 구현`
-- [ ] **Presentation: Lambda 핸들러(REST API) 테스트 코드 작성**  
+- [x] **Presentation: Lambda 핸들러(REST API) 테스트 코드 작성**  
   - 커밋: `test(backend): Lambda 핸들러 테스트 추가`
-- [ ] **Presentation: Lambda 핸들러(REST API) 구현**  
+- [x] **Presentation: Lambda 핸들러(REST API) 구현**  
   - 커밋: `feat(backend): Lambda 핸들러 구현`
 
 ---

@@ -35,6 +35,8 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+*.bak
+*.new
 
 # TypeScript
 *.tsbuildinfo
