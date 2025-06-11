@@ -1,5 +1,5 @@
 import { TaskFactory } from '../TaskFactory';
-import { TaskPriority, TaskStatus, CreateTaskDTO, Task } from '../Task';
+import { TaskPriority, TaskStatus, CreateTaskDTO } from '../Task';
 
 describe('TaskFactory', () => {
   describe('create', () => {
