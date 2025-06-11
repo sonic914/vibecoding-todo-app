@@ -60,13 +60,13 @@
 ## 3. 프론트엔드: UI/UX 컴포넌트 및 기능 구현
 - [x] **Undo 기능 구현**  
   - 커밋: `feat(frontend): Undo 기능 구현`
-- [ ] 입력폼, 리스트뷰, 필터, 다크/라이트모드, 접근성 등 UI/UX 컴포넌트 구현  
+- [x] **입력폼, 리스트뷰, 필터, 다크/라이트모드, 접근성 등 UI/UX 컴포넌트 구현**  
   - 커밋: `feat(frontend): UI/UX 컴포넌트 및 기능 구현`
 
 ---
 
 ## 4. 프론트엔드: GitHub Actions + Pages 배포 자동화
-- [ ] GitHub Actions 워크플로우 작성  
+- [x] GitHub Actions 워크플로우 작성  
   - 커밋: `ci(frontend): GitHub Actions 배포 자동화`
 - [ ] GitHub Pages 배포 테스트  
   - 커밋: `docs: 프론트엔드 배포 테스트/결과 기록`
