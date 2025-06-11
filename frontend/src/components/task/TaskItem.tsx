@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Paper, Group, Text, ActionIcon, Badge, Stack, TextInput, Button, Tooltip } from '@mantine/core';
+import { Paper, Group, Text, ActionIcon, Badge, Stack, TextInput, Button, Tooltip, useMantineColorScheme, rem } from '@mantine/core';
 import { IconEdit, IconTrash, IconCheck, IconX, IconDeviceFloppy } from '@tabler/icons-react';
 import { useTaskContext } from '@/contexts/taskContext/TaskContext';
 import { Task, TaskStatus, UpdateTaskDTO } from '@/domain/task/Task';
@@ -7,12 +7,16 @@ import { formatDate } from '../../utils/dateUtils';
 
 interface TaskItemProps {
   task: Task;
+  index?: number;
 }
 
 /**
  * 개별 할 일 항목을 표시하는 컴포넌트
  */
-export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
+export const TaskItem: React.FC<TaskItemProps> = ({ task, index = 0 }) => {
+  const { colorScheme } = useMantineColorScheme();
+  // index를 사용하여 애니메이션 지연 효과 계산
+  const animationDelay = index * 50;
   const { updateTask, deleteTask, completeTask } = useTaskContext();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
@@ -66,7 +70,13 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   // 수정 모드
   if (isEditing) {
     return (
-      <Paper shadow="xs" p="md" withBorder data-testid="task-item">
+      <Paper 
+        shadow="xs" 
+        p="md" 
+        withBorder 
+        data-testid="task-item"
+        style={{ position: 'relative' }}
+      >
         <Stack>
           <TextInput
             value={editTitle}
@@ -74,12 +84,13 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
             placeholder="할 일 제목"
             autoFocus
             data-testid="task-edit-input"
+            aria-label="할 일 제목 수정"
           />
           <Group justify="flex-end">
             <Button
               variant="outline"
               color="gray"
-              leftSection={<IconX size={16} />}
+              leftSection={<IconX size={rem(16)} />}
               onClick={handleEditCancel}
               aria-label="수정 취소"
               data-testid="task-edit-cancel-btn"
@@ -87,7 +98,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
               취소
             </Button>
             <Button
-              leftSection={<IconDeviceFloppy size={16} />}
+              leftSection={<IconDeviceFloppy size={rem(16)} />}
               onClick={handleEditSave}
               aria-label="수정 저장"
               data-testid="task-edit-save-btn"
@@ -102,12 +113,36 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
 
   // 일반 모드
   return (
-    <Paper shadow="xs" p="md" withBorder data-testid="task-item">
+    <Paper 
+      shadow="xs" 
+      p="md" 
+      withBorder 
+      data-testid="task-item"
+      style={{ 
+        position: 'relative',
+        transition: 'all 0.2s ease',
+        animationDelay: `${animationDelay}ms`
+      }}
+      className={`task-item-hover fade-in ${task.status === TaskStatus.DONE ? 'task-completed' : ''}`}
+    >
       <Group justify="space-between" wrap="nowrap">
-        <Stack gap="xs">
-          <Group gap="xs">
-            <Text fw={500} data-testid="task-title">{task.title}</Text>
-            <Badge color={getBadgeColor(task.status)} data-testid="task-status">
+        <Stack gap="xs" style={{ flex: 1 }}>
+          <Group gap="xs" wrap="wrap">
+            <Text 
+              fw={500} 
+              data-testid="task-title"
+              style={{ 
+                textDecoration: task.status === TaskStatus.DONE ? 'line-through' : 'none',
+                opacity: task.status === TaskStatus.DONE ? 0.8 : 1
+              }}
+            >
+              {task.title}
+            </Text>
+            <Badge 
+              color={getBadgeColor(task.status)} 
+              data-testid="task-status"
+              variant={colorScheme === 'dark' ? 'light' : 'filled'}
+            >
               {task.status === TaskStatus.TODO ? '할 일' : 
                task.status === TaskStatus.IN_PROGRESS ? '진행 중' : '완료'}
             </Badge>
@@ -124,8 +159,9 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
               onClick={handleToggleComplete}
               aria-label={task.status === TaskStatus.DONE ? "미완료로 표시" : "완료로 표시"}
               data-testid="task-complete-btn"
+              variant="light"
             >
-              <IconCheck size={16} />
+              <IconCheck size={rem(16)} />
             </ActionIcon>
           </Tooltip>
           <Tooltip label="수정">
@@ -134,8 +170,9 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
               onClick={handleEditStart}
               aria-label="수정"
               data-testid="task-edit-btn"
+              variant="light"
             >
-              <IconEdit size={16} />
+              <IconEdit size={rem(16)} />
             </ActionIcon>
           </Tooltip>
           <Tooltip label="삭제">
@@ -144,8 +181,9 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
               onClick={handleDelete}
               aria-label="삭제"
               data-testid="task-delete-btn"
+              variant="light"
             >
-              <IconTrash size={16} />
+              <IconTrash size={rem(16)} />
             </ActionIcon>
           </Tooltip>
         </Group>

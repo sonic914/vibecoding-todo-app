@@ -11,7 +11,7 @@ describe('TaskFactory', () => {
       
       // Mock date for consistent testing
       const now = new Date('2025-06-10T00:00:00.000Z');
-      jest.spyOn(global, 'Date').mockImplementation(() => now as unknown as string);
+      jest.spyOn(global, 'Date').mockImplementation(() => now);
       
       // Act
       const task = TaskFactory.create(taskDTO);
@@ -46,7 +46,7 @@ describe('TaskFactory', () => {
       
       // Mock date for consistent testing
       const now = new Date('2025-06-10T00:00:00.000Z');
-      jest.spyOn(global, 'Date').mockImplementation(() => now as unknown as string);
+      jest.spyOn(global, 'Date').mockImplementation(() => now);
       
       // Act
       const task = TaskFactory.create(taskDTO);
@@ -88,7 +88,7 @@ describe('TaskFactory', () => {
       
       // Mock date for consistent testing
       const now = new Date('2025-06-10T00:00:00.000Z');
-      jest.spyOn(global, 'Date').mockImplementation(() => now as unknown as string);
+      jest.spyOn(global, 'Date').mockImplementation(() => now);
       
       // Act
       const task = TaskFactory.createCompleted(taskDTO);

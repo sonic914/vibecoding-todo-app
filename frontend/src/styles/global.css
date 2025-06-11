@@ -1,0 +1,83 @@
+/* 전역 스타일 */
+.task-completed {
+  opacity: 0.8;
+}
+
+/* 애니메이션 효과 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+/* 할 일 항목 호버 효과 */
+.task-item-hover {
+  transition: all 0.2s ease;
+}
+
+.task-item-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .responsive-container {
+    padding: 0.5rem;
+  }
+}
+
+/* 접근성 포커스 스타일 */
+:focus-visible {
+  outline: 2px solid var(--mantine-color-blue-6);
+  outline-offset: 2px;
+}
+
+/* 다크 모드 전환 애니메이션 */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 버튼 스타일 개선 */
+button {
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+/* 버튼 클릭 효과 제거 */
+.btn-effect {
+  position: relative;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  20% {
+    transform: scale(25, 25);
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(40, 40);
+  }
+}
