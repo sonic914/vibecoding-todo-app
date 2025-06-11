@@ -1,5 +1,5 @@
 import { AppShell, Container, Title, Text, Group, ActionIcon, useMantineColorScheme, Stack, Button, Tooltip, rem } from '@mantine/core';
-import { IconSun, IconMoon } from '@tabler/icons-react';
+import { IconSun, IconMoon, IconArrowBackUp } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { loadThemeFromStorage, saveThemeToStorage, getSystemTheme } from '@/utils/themeUtils';
 import { TaskProvider, useTaskContext } from '@/contexts/taskContext/TaskContext';
@@ -15,17 +15,13 @@ const UndoButton = () => {
   const { canUndo } = state;
   
   return (
-    <Tooltip label={canUndo ? "이전 상태로 되돌리기" : "이전 상태가 없습니다"} disabled={!canUndo}>
+    <Tooltip label={canUndo ? "이전 상태로 되돌리기" : "되돌릴 작업이 없습니다"}>
       <Button
-        variant="filled"
-        size="md"
         onClick={undo}
         disabled={!canUndo}
         aria-label="실행 취소"
-        className="fade-in"
         data-testid="undo-button"
-        style={{ minWidth: '200px' }}
-        color="blue"
+        leftSection={<IconArrowBackUp size={14} />}
       >
         실행 취소
       </Button>

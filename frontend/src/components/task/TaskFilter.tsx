@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Group, SegmentedControl, TextInput, Button, Paper, Stack, rem } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconSearch } from '@tabler/icons-react';
+import { IconSearch, IconRefresh } from '@tabler/icons-react';
 import { useTaskContext } from '@/contexts/taskContext/TaskContext';
 import { TaskStatus } from '@/domain/task/Task';
 
@@ -105,12 +105,11 @@ export const TaskFilter: React.FC = () => {
               />
               
               <Button
-                variant="light"
+                variant="default"
                 onClick={handleClearFilter}
                 aria-label="필터 초기화"
                 data-testid="task-filter-clear-btn"
-                size="sm"
-                style={{ minWidth: '100px' }}
+                leftSection={<IconRefresh size={14} />}
               >
                 초기화
               </Button>
@@ -167,12 +166,12 @@ export const TaskFilter: React.FC = () => {
               />
               
               <Button
-                variant="light"
+                variant="default"
                 onClick={handleClearFilter}
                 aria-label="필터 초기화"
                 data-testid="task-filter-clear-btn-mobile"
                 fullWidth
-                size="xs"
+                leftSection={<IconRefresh size={14} />}
               >
                 필터 초기화
               </Button>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Paper, TextInput, Button, Group, Stack, Select, Transition } from '@mantine/core';
+import { Paper, TextInput, Button, Flex, Stack, Select, Transition } from '@mantine/core';
+import { IconPlus, IconRefresh } from '@tabler/icons-react';
 import { useTaskContext } from '@/contexts/taskContext/TaskContext';
 import { TaskFactory } from '@/domain/task/TaskFactory';
 import { TaskStatus } from '@/domain/task/Task';
@@ -12,6 +13,12 @@ export const TaskForm: React.FC = () => {
   const [title, setTitle] = useState('');
   const [status, setStatus] = useState<TaskStatus>(TaskStatus.TODO);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 할 일 추가 제출 핸들러
+    const handleReset = () => {
+    setTitle('');
+    setStatus(TaskStatus.TODO);
+  };
 
   // 할 일 추가 제출 핸들러
   const handleSubmit = (e: React.FormEvent) => {
@@ -74,20 +81,25 @@ export const TaskForm: React.FC = () => {
                 size="md"
               />
               
-              <Group justify="flex-end" mt="md">
+              <Flex gap="sm" justify="flex-end" mt="md">
+                <Button
+                  variant="default"
+                  onClick={handleReset}
+                  leftSection={<IconRefresh size={14} />}
+                  data-testid="task-reset-btn"
+                >
+                  다시 작성
+                </Button>
                 <Button
                   type="submit"
                   disabled={!title.trim() || isSubmitting}
                   loading={isSubmitting}
                   data-testid="task-submit-btn"
-                  size="md"
-                  variant="filled"
-                  color="blue"
-                  fullWidth
+                  leftSection={<IconPlus size={14} />}
                 >
                   할 일 추가
                 </Button>
-              </Group>
+              </Flex>
             </Stack>
           </form>
         </Paper>
