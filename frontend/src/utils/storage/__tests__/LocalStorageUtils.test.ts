@@ -17,7 +17,7 @@ const localStorageMock = (() => {
   let store: Record<string, string> = {};
   
   return {
-    getItem: jest.fn((key: string): string => {
+    getItem: jest.fn((key: string): string | null => {
       return store[key] || null;
     }),
     setItem: jest.fn((key: string, value: string): void => {
@@ -125,7 +125,7 @@ describe('LocalStorageUtils', () => {
     
     it('데이터가 없으면 기본값을 반환해야 함', () => {
       const key = StorageKeys.TASKS;
-      const defaultValue = [];
+      const defaultValue: string[] = [];
       
       localStorageMock.getItem.mockReturnValueOnce(null);
       
@@ -137,7 +137,7 @@ describe('LocalStorageUtils', () => {
     
     it('조회 중 오류가 발생하면 기본값을 반환해야 함', () => {
       const key = StorageKeys.TASKS;
-      const defaultValue = [];
+      const defaultValue: string[] = [];
       
       // 오류 시뮬레이션
       localStorageMock.getItem.mockImplementationOnce(() => {

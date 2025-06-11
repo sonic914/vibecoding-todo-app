@@ -1,4 +1,4 @@
-import React from 'react';
+// React 17 이상에서는 JSX 사용 시 React import가 필요 없음
 import { render, screen, fireEvent } from '@testing-library/react';
 import { TaskProvider, useTaskContext } from '@/contexts/taskContext/TaskContext';
 import { TaskFactory } from '@/domain/task/TaskFactory';
