@@ -21,7 +21,7 @@ export const TaskFilter: React.FC = () => {
         status: status as TaskStatus 
       });
     } else if (state.filter.status) {
-      // status가 null이고 이전에 status 필터가 설정되어 있었다면 status 필터만 제거
+      // status가 null이고 이전에 status 필터가 설정되어 있었다면 status 필터만      제거
       const { status: _, ...restFilter } = state.filter;
       setFilter(restFilter);
     }
