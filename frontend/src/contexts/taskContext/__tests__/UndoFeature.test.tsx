@@ -1,12 +1,8 @@
 // React 17 이상에서는 JSX 사용 시 React import가 필요 없음
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { TaskProvider, useTaskContext } from '../TaskContext';
-import { Task, TaskStatus } from '@/domain/task/Task';
+import { TaskStatus } from '@/domain/task/Task';
 import { TaskFactory } from '@/domain/task/TaskFactory';
-
-// Task 타입이 실제로 사용되는지 확인하기 위한 더미 함수
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _ensureTaskTypeIsUsed = (task: Task) => { return task.id; };
 
 // 테스트용 컴포넌트
 const TestComponent = () => {
@@ -44,7 +40,7 @@ const TestComponent = () => {
       <div data-testid="undo-stack-size">{undoStack.length}</div>
       <div data-testid="can-undo">{canUndo ? 'true' : 'false'}</div>
       <ul>
-        {tasks.map((task: Task) => (
+        {tasks.map((task) => (
           <li key={task.id} data-testid={`task-${task.id}`}>
             {task.title} - {task.status}
             <button onClick={() => handleDeleteTask(task.id)} data-testid={`delete-${task.id}`}>
