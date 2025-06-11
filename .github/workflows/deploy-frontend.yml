@@ -5,6 +5,7 @@ on:
     branches: [ "master" ]
     paths:
       - 'frontend/**'
+      - '.github/workflows/**'
   # 수동으로 워크플로우를 실행할 수 있도록 설정
   workflow_dispatch:
 
