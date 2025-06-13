@@ -1,0 +1,28 @@
+{
+    "IdentityProvider": {
+        "UserPoolId": "ap-northeast-2_10IJl15Ho",
+        "ProviderName": "Google",
+        "ProviderType": "Google",
+        "ProviderDetails": {
+            "attributes_url": "https://people.googleapis.com/v1/people/me?personFields=",
+            "attributes_url_add_attributes": "true",
+            "authorize_scopes": "profile email openid",
+            "authorize_url": "https://accounts.google.com/o/oauth2/v2/auth",
+            "client_id": "60282044619-olq62gkb4jut8ccjs27403nmg9csgi9b.apps.googleusercontent.com",
+            "client_secret": "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",
+            "oidc_issuer": "https://accounts.google.com",
+            "token_request_method": "POST",
+            "token_url": "https://www.googleapis.com/oauth2/v4/token"
+        },
+        "AttributeMapping": {
+            "email": "email",
+            "family_name": "family_name",
+            "given_name": "given_name",
+            "name": "name",
+            "picture": "picture",
+            "username": "sub"
+        },
+        "LastModifiedDate": "2025-06-13T22:49:34.402000+09:00",
+        "CreationDate": "2025-06-13T22:49:34.402000+09:00"
+    }
+}

@@ -50,7 +50,7 @@
   - 커밋: `test(frontend): TaskContext에 LocalStorage 연동 테스트 추가`
 - [x] **TaskContext에 LocalStorage 연동 기능 구현**  
   - 커밋: `feat(frontend): TaskContext에 LocalStorage 연동 기능 구현`
-- [~] **할 일 CRUD(추가/수정/삭제/완료/미완료) 기능 테스트 코드 작성**  
+- [x] **할 일 CRUD(추가/수정/삭제/완료/미완료) 기능 테스트 코드 작성**  
   - 커밋: `test(frontend): 할 일 CRUD 테스트 추가`
 - [x] **할 일 CRUD 기능 구현**  
   - 커밋: `feat(frontend): 할 일 CRUD 기능 구현`
@@ -93,7 +93,7 @@
 ---
 
 ## 6. 백엔드: 인증(AWS Cognito + Google OAuth)
-- [ ] Cognito User Pool 및 Google OAuth 연동 설정  
+- [x] **Cognito User Pool 및 Google OAuth 연동 설정**  
   - 커밋: `feat(backend): Cognito + Google OAuth 인증 연동`
 - [ ] 인증 미들웨어/토큰 검증 로직 테스트 및 구현  
   - 커밋: `test(backend): 인증 미들웨어 테스트 추가`

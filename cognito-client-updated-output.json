@@ -1,0 +1,36 @@
+{
+    "UserPoolClient": {
+        "UserPoolId": "ap-northeast-2_10IJl15Ho",
+        "ClientName": "VibecodingTodoAppClient",
+        "ClientId": "1d8btkjuugl5hm6me1pd2m154b",
+        "ClientSecret": "gs4b50fatsvcdg2d3r4s3hhdh147v6tc0749d37ucajl7mdf4kc",
+        "LastModifiedDate": "2025-06-13T22:51:07.611000+09:00",
+        "CreationDate": "2025-06-13T22:34:13.310000+09:00",
+        "RefreshTokenValidity": 30,
+        "TokenValidityUnits": {},
+        "SupportedIdentityProviders": [
+            "Google",
+            "COGNITO"
+        ],
+        "CallbackURLs": [
+            "http://localhost:5173/callback"
+        ],
+        "LogoutURLs": [
+            "http://localhost:5173"
+        ],
+        "AllowedOAuthFlows": [
+            "implicit",
+            "code"
+        ],
+        "AllowedOAuthScopes": [
+            "phone",
+            "openid",
+            "profile",
+            "email"
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "EnableTokenRevocation": true,
+        "EnablePropagateAdditionalUserContextData": false,
+        "AuthSessionValidity": 3
+    }
+}
