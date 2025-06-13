@@ -95,6 +95,13 @@
 ## 6. 백엔드: 인증(AWS Cognito + Google OAuth)
 - [x] **Cognito User Pool 및 Google OAuth 연동 설정**  
   - 커밋: `feat(backend): Cognito + Google OAuth 인증 연동`
+  - AWS CLI 설치 및 계정 구성
+  - Cognito User Pool 생성 (ID: ap-northeast-2_10IJl15Ho)
+  - 앱 클라이언트 생성 (ID: 1d8btkjuugl5hm6me1pd2m154b)
+  - Google OAuth 클라이언트 ID 및 보안 비밀번호 설정
+  - Cognito User Pool에 Google을 ID 공급자로 추가
+  - 앱 클라이언트에 Google IDP 연동 완료
+  - Cognito 호스팅 UI 도메인 설정 (vibecoding-todo-app)
 - [ ] 인증 미들웨어/토큰 검증 로직 테스트 및 구현  
   - 커밋: `test(backend): 인증 미들웨어 테스트 추가`
   - 커밋: `feat(backend): 인증 미들웨어 구현`
