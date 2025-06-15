@@ -1,7 +1,9 @@
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, Context } from 'aws-lambda';
-import { UpdateTaskUseCase } from '../../../application/use-cases/UpdateTask';
+import { UpdateTaskUseCase } from '../../application/use-cases/UpdateTask';
+import { authMiddleware } from '../middleware/authMiddleware';
 
-export const updateTaskHandler = (updateTaskUseCase: UpdateTaskUseCase): APIGatewayProxyHandler => async (
+// 인증되지 않은 핸들러 정의
+const updateTaskHandlerUnauth = (updateTaskUseCase: UpdateTaskUseCase): APIGatewayProxyHandler => async (
   event: APIGatewayProxyEvent,
   _context: Context,
 ) => {
@@ -38,4 +40,9 @@ export const updateTaskHandler = (updateTaskUseCase: UpdateTaskUseCase): APIGate
       body: JSON.stringify({ message: err.message || 'Internal Server Error' }),
     };
   }
+};
+
+// 인증 미들웨어를 적용한 핸들러 내보내기
+export const updateTaskHandler = (updateTaskUseCase: UpdateTaskUseCase): APIGatewayProxyHandler => {
+  return authMiddleware(updateTaskHandlerUnauth(updateTaskUseCase));
 };

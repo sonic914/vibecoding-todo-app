@@ -1,7 +1,9 @@
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, Context } from 'aws-lambda';
-import { GetTaskByIdUseCase } from '../../../application/use-cases/GetTaskById';
+import { GetTaskByIdUseCase } from '../../application/use-cases/GetTaskById';
+import { authMiddleware } from '../middleware/authMiddleware';
 
-export const getTaskByIdHandler = (getTaskByIdUseCase: GetTaskByIdUseCase): APIGatewayProxyHandler => async (
+// 인증되지 않은 핸들러 정의
+const getTaskByIdHandlerUnauth = (getTaskByIdUseCase: GetTaskByIdUseCase): APIGatewayProxyHandler => async (
   event: APIGatewayProxyEvent,
   _context: Context,
 ) => {
@@ -35,4 +37,9 @@ export const getTaskByIdHandler = (getTaskByIdUseCase: GetTaskByIdUseCase): APIG
       body: JSON.stringify({ message: err.message || 'Internal Server Error' }),
     };
   }
+};
+
+// 인증 미들웨어를 적용한 핸들러 내보내기
+export const getTaskByIdHandler = (getTaskByIdUseCase: GetTaskByIdUseCase): APIGatewayProxyHandler => {
+  return authMiddleware(getTaskByIdHandlerUnauth(getTaskByIdUseCase));
 };

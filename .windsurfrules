@@ -8,6 +8,7 @@
 - 커밋 전에 docs/checklist.md에 진행상황을 업데이트 할 것
 - 설계 변경시에는 requirements.md와 checklist.md를 수정할 것
 - 폴더를 생성할때에 README.md를 생성할 것
+- checklist.md 업데이트 할때 실행한 계획을 기록할 것
 
 본 문서는 Clean Architecture, TDD, SOLID 원칙을 기반으로 한 TODO 웹 앱 개발을 위한 통합 규칙 파일입니다. 모든 팀원은 위 기본 규칙과 함께 아래 규칙을 숙지하고 반드시 준수해야 합니다.
 

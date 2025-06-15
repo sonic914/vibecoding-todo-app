@@ -1,7 +1,9 @@
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, Context } from 'aws-lambda';
-import { DeleteTaskUseCase } from '../../../application/use-cases/DeleteTask';
+import { DeleteTaskUseCase } from '../../application/use-cases/DeleteTask';
+import { authMiddleware } from '../middleware/authMiddleware';
 
-export const deleteTaskHandler = (deleteTaskUseCase: DeleteTaskUseCase): APIGatewayProxyHandler => async (
+// 인증되지 않은 핸들러 정의
+const deleteTaskHandlerUnauth = (deleteTaskUseCase: DeleteTaskUseCase): APIGatewayProxyHandler => async (
   event: APIGatewayProxyEvent,
   _context: Context,
 ) => {
@@ -28,4 +30,9 @@ export const deleteTaskHandler = (deleteTaskUseCase: DeleteTaskUseCase): APIGate
       body: JSON.stringify({ message: err.message || 'Internal Server Error' }),
     };
   }
+};
+
+// 인증 미들웨어를 적용한 핸들러 내보내기
+export const deleteTaskHandler = (deleteTaskUseCase: DeleteTaskUseCase): APIGatewayProxyHandler => {
+  return authMiddleware(deleteTaskHandlerUnauth(deleteTaskUseCase));
 };

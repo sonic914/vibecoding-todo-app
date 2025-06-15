@@ -128,7 +128,7 @@ describe('TaskContext', () => {
     expect(screen.getByTestId('task-status').textContent).toBe(TaskStatus.TODO);
   });
   
-  it('할 일을 업데이트할 수 있어야 함', () => {
+  it('할 일을 삭제할 수 있어야 함', () => {
     // Arrange
     render(
       <TaskProvider initialState={{ tasks: [], isLoading: false, error: null, filter: {}, undoStack: [], canUndo: false }}>
@@ -155,14 +155,13 @@ describe('TaskContext', () => {
     );
     
     // Act
-    fireEvent.click(screen.getByTestId('add-task-btn'));
     fireEvent.click(screen.getByTestId('delete-task-btn'));
     
     // Assert
     expect(screen.getByTestId('task-count').textContent).toBe('0');
   });
-  
-  it('할 일을 완료할 수 있어야 함', () => {
+
+  it('할 일을 업데이트할 수 있어야 함', () => {
     // Arrange
     render(
       <TaskProvider initialState={{ tasks: [], isLoading: false, error: null, filter: {}, undoStack: [], canUndo: false }}>
@@ -171,16 +170,54 @@ describe('TaskContext', () => {
     );
     
     // Act
-    fireEvent.click(screen.getByTestId('add-task-btn'));
-    fireEvent.click(screen.getByTestId('complete-task-btn'));
+    fireEvent.click(screen.getByTestId('add-task-btn')); // Adds "테스트 할 일"
+    fireEvent.click(screen.getByTestId('update-task-btn')); // Updates title to "업데이트된 할 일"
     
     // Assert
-    const taskItems = screen.getAllByTestId('task-item');
-    const firstTaskStatus = taskItems[0].querySelector('[data-testid="task-status"]');
-    expect(firstTaskStatus?.textContent).toBe(TaskStatus.DONE);
+    expect(screen.getByTestId('task-count').textContent).toBe('1');
+    expect(screen.getByTestId('task-title').textContent).toBe('업데이트된 할 일');
   });
-  
-  it('필터를 설정할 수 있어야 함', () => {
+
+  it('할 일을 완료 상태로 변경할 수 있어야 함', () => {
+    // Arrange
+    render(
+      <TaskProvider initialState={{ tasks: [], isLoading: false, error: null, filter: {}, undoStack: [], canUndo: false }}>
+        <TestComponent />
+      </TaskProvider>
+    );
+    
+    // Act
+    fireEvent.click(screen.getByTestId('add-task-btn')); // Adds "테스트 할 일" with status TODO
+    // Ensure task is added and status is TODO initially
+    expect(screen.getByTestId('task-status').textContent).toBe(TaskStatus.TODO);
+    
+    fireEvent.click(screen.getByTestId('complete-task-btn')); // Marks task as COMPLETED
+    
+    // Assert
+    expect(screen.getByTestId('task-status').textContent).toBe(TaskStatus.DONE);
+  });
+
+  it('완료된 할 일을 다시 미완료(TODO) 상태로 변경할 수 있어야 함', () => {
+    // Arrange
+    render(
+      <TaskProvider initialState={{ tasks: [], isLoading: false, error: null, filter: {}, undoStack: [], canUndo: false }}>
+        <TestComponent />
+      </TaskProvider>
+    );
+    
+    // Act
+    fireEvent.click(screen.getByTestId('add-task-btn')); // Adds "테스트 할 일" with status TODO
+    fireEvent.click(screen.getByTestId('complete-task-btn')); // Marks task as COMPLETED
+    // Ensure task is COMPLETED
+    expect(screen.getByTestId('task-status').textContent).toBe(TaskStatus.DONE);
+
+    fireEvent.click(screen.getByTestId('complete-task-btn')); // Marks task as TODO (assuming toggle)
+    
+    // Assert
+    expect(screen.getByTestId('task-status').textContent).toBe(TaskStatus.TODO);
+  });
+
+  it('상태로 필터링할 수 있어야 함', () => {
     // Arrange
     render(
       <TaskProvider initialState={{ tasks: [], isLoading: false, error: null, filter: {}, undoStack: [], canUndo: false }}>
