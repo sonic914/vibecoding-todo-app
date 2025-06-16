@@ -1,0 +1,7 @@
+{
+  "VibeCodingTodoAppStack": {
+    "TodoApiEndpointC1E16B6C": "https://oc76spz5xb.execute-api.ap-northeast-2.amazonaws.com/api/",
+    "ApiUrl": "https://oc76spz5xb.execute-api.ap-northeast-2.amazonaws.com/api/",
+    "TasksTableName": "VibeCodingTodoAppStack-TasksTable88911DC5-F54BSIKL38I6"
+  }
+}

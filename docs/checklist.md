@@ -92,27 +92,44 @@
 
 ---
 
-## 6. 백엔드: 인증(AWS Cognito + Google OAuth)
-- [x] **Cognito User Pool 및 Google OAuth 연동 설정**  
+## 6. 프론트엔드 & 백엔드: 인증 (AWS Amplify, Cognito + Google OAuth)
+- [x] **AWS Cognito User Pool 및 Google OAuth 연동 설정 (백엔드/인프라)**
   - 커밋: `feat(backend): Cognito + Google OAuth 인증 연동`
-  - AWS CLI 설치 및 계정 구성
-  - Cognito User Pool 생성 (ID: ap-northeast-2_10IJl15Ho)
-  - 앱 클라이언트 생성 (ID: 1d8btkjuugl5hm6me1pd2m154b)
-  - Google OAuth 클라이언트 ID 및 보안 비밀번호 설정
+  - AWS CLI 설치 및 계정 구성 (완료)
+  - Cognito User Pool 생성 (ID: `ap-northeast-2_zNUOZQuzD`)
+  - 앱 클라이언트 생성 (ID: `454aegm2igrm52s2lrlqscgefa`)
+  - Google OAuth 클라이언트 ID 및 보안 비밀번호 설정 (Google Cloud Console)
   - Cognito User Pool에 Google을 ID 공급자로 추가
   - 앱 클라이언트에 Google IDP 연동 완료
-  - Cognito 호스팅 UI 도메인 설정 (vibecoding-todo-app)
-- [ ] 인증 미들웨어/토큰 검증 로직 테스트 및 구현  
+  - Cognito 호스팅 UI 도메인 설정 (`ap-northeast-2znuozquzd.auth.ap-northeast-2.amazoncognito.com`)
+- [x] **백엔드: 인증 미들웨어/토큰 검증 로직 테스트 및 구현**
   - 커밋: `test(backend): 인증 미들웨어 테스트 추가`
   - 커밋: `feat(backend): 인증 미들웨어 구현`
+  - 커밋: `feat(backend): 인증 미들웨어를 모든 Lambda 핸들러에 적용 및 경로 오류 수정`
+- [x] **프론트엔드: AWS Amplify 연동 및 인증 UI 구현**
+  - `aws-amplify` v6 호환성 문제 해결 (`AuthContext.tsx`, `main.tsx`)
+  - Amplify 설정 파일 (`amplify.ts`)에 Cognito 환경 변수 및 OAuth 리디렉션 URI (`http://localhost:3000`) 설정
+  - 로그인/로그아웃 기능 구현 (`AuthContext.tsx`, `App.tsx`)
+  - Google OAuth `redirect_uri_mismatch` 오류 해결 (Google Cloud Console "승인된 리디렉션 URI"에 Cognito 콜백 URI `https://[your-cognito-domain]/oauth2/idpresponse` 정확히 등록 및 브라우저 캐시 문제 해결)
+  - 커밋: `fix(frontend): Amplify v6 호환성 및 Hub/Auth 모듈 사용 수정`
+  - 커밋: `feat(frontend): 로그아웃 버튼 추가 및 인증 컨텍스트 연동`
+  - 커밋: `fix(frontend): Google OAuth redirect_uri_mismatch 해결 및 설정 검증`
 
 ---
 
 ## 7. 인프라: AWS CDK로 IaC 구현
-- [ ] CDK로 API Gateway, Lambda, DynamoDB, Cognito 리소스 정의  
+- [x] CDK로 API Gateway, Lambda, DynamoDB, Cognito 리소스 정의  
   - 커밋: `feat(infra): AWS CDK IaC 구현`
-- [ ] 리소스 Description 영문 작성 및 문서화  
+  - `infra/cdk` 폴더 생성 및 CDK 프로젝트 수동 설정
+  - DynamoDB 테이블 리소스 정의 (TasksTable)
+  - Lambda 함수 리소스 정의 (GetAllTasks, GetTaskById, CreateTask, UpdateTask, DeleteTask)
+  - API Gateway (RestApi) 리소스 정의 및 Lambda 통합
+  - Cognito User Pool Authorizer 정의 (기존 User Pool ID 사용)
+- [x] 리소스 Description 영문 작성 및 문서화  
   - 커밋: `docs: 인프라 리소스 설명/문서화`
+  - `infra/cdk/README.md` 파일 작성
+  - DynamoDB, Lambda, API Gateway, Cognito 리소스 상세 설명
+  - 인프라 배포 및 구성 가이드 작성
 
 ---
 

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
 import { taskReducer } from '../../reducers/taskReducer/taskReducer';
 import { initialTaskState, TaskState } from '../../reducers/taskReducer/taskTypes';
-import { Task, UpdateTaskDTO } from '../../domain/task/Task';
+import { Task, UpdateTaskDTO, TaskStatus } from '../../domain/task/Task';
 import {
   addTask as addTaskAction,
   updateTask as updateTaskAction,
@@ -17,16 +17,18 @@ import {
   TaskFilter
 } from '../../reducers/taskReducer/taskActions';
 import { saveToStorage, getFromStorage, StorageKeys, isStorageAvailable } from '../../utils/storage/LocalStorageUtils';
+import { taskService } from '../../api';
+import { API_CONFIG } from '../../config/api';
 
 /**
  * 할 일 컨텍스트에서 제공하는 기능들의 인터페이스
  */
 interface TaskContextType {
   state: TaskState;
-  addTask: (task: Task) => void;
-  updateTask: (id: string, updates: UpdateTaskDTO) => void;
-  deleteTask: (id: string) => void;
-  completeTask: (id: string) => void;
+  addTask: (task: Task) => Promise<void>;
+  updateTask: (id: string, updates: UpdateTaskDTO) => Promise<void>;
+  deleteTask: (id: string) => Promise<void>;
+  completeTask: (id: string, isCompleted: boolean) => Promise<void>;
   fetchTasks: () => Promise<void>;
   setFilter: (filter: TaskFilter) => void;
   clearFilter: () => void;
@@ -58,39 +60,180 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
   /**
    * 할 일 추가 함수
    */
-  const addTask = (task: Task) => {
+  const addTask = async (task: Task) => {
     // 현재 상태를 저장하고 액션 실행
     const previousState = { tasks: [...state.tasks] };
-    dispatch(addTaskAction(task));
-    // 실행한 액션과 이전 상태 기록
-    dispatch(recordActionAction(addTaskAction(task), previousState));
+    
+    try {
+      // API 사용 여부 확인
+      if (!API_CONFIG.useLocalStorage) {
+        // API로 할 일 추가
+        const createdTask = await taskService.createTask(task);
+        dispatch(addTaskAction(createdTask));
+        // 실행한 액션과 이전 상태 기록
+        dispatch(recordActionAction(addTaskAction(createdTask), previousState));
+        return;
+      }
+      
+      // 로컬 스토리지 사용 시
+      dispatch(addTaskAction(task));
+      // 실행한 액션과 이전 상태 기록
+      dispatch(recordActionAction(addTaskAction(task), previousState));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 
+                          (typeof error === 'object' && error !== null && 'message' in error) ? 
+                          String(error.message) : '할 일 추가에 실패했습니다.';
+      console.error('할 일 추가 오류:', errorMessage);
+      
+      // 오류 상태 업데이트
+      dispatch(fetchTasksFailureAction(errorMessage));
+      
+      // 오류 처리 후 상태 다시 불러오기
+      if (!API_CONFIG.useLocalStorage) {
+        // API 상태에서 오류 발생 시 재시도
+        setTimeout(() => {
+          fetchTasks();
+        }, 3000); // 3초 후 재시도
+      }
+    }
   };
 
   /**
    * 할 일 업데이트 함수
    */
-  const updateTask = (id: string, updates: UpdateTaskDTO) => {
+  const updateTask = async (id: string, updates: UpdateTaskDTO) => {
     const previousState = { tasks: [...state.tasks] };
-    dispatch(updateTaskAction(id, updates));
-    dispatch(recordActionAction(updateTaskAction(id, updates), previousState));
+    
+    try {
+      // API 사용 여부 확인
+      if (!API_CONFIG.useLocalStorage) {
+        // 현재 태스크 찾기
+        const currentTask = state.tasks.find(task => task.id === id);
+        if (!currentTask) {
+          throw new Error('업데이트할 태스크를 찾을 수 없습니다.');
+        }
+        
+        // 업데이트된 태스크 생성
+        const updatedTask: Task = {
+          ...currentTask,
+          ...updates,
+          updatedAt: new Date()
+        };
+        
+        // API로 태스크 업데이트
+        await taskService.updateTask(updatedTask);
+        
+        // 로컬 상태 업데이트
+        dispatch(updateTaskAction(id, updates));
+        dispatch(recordActionAction(updateTaskAction(id, updates), previousState));
+        return;
+      }
+      
+      // 로컬 스토리지 사용 시
+      dispatch(updateTaskAction(id, updates));
+      dispatch(recordActionAction(updateTaskAction(id, updates), previousState));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 
+                          (typeof error === 'object' && error !== null && 'message' in error) ? 
+                          String(error.message) : '태스크 업데이트에 실패했습니다.';
+      console.error('태스크 업데이트 오류:', errorMessage);
+      
+      // 오류 상태 업데이트
+      dispatch(fetchTasksFailureAction(errorMessage));
+      
+      // 오류 발생 시 현재 상태로 복구
+      if (!API_CONFIG.useLocalStorage) {
+        fetchTasks();
+      }
+    }
   };
 
   /**
    * 할 일 삭제 함수
    */
-  const deleteTask = (id: string) => {
+  const deleteTask = async (id: string) => {
     const previousState = { tasks: [...state.tasks] };
-    dispatch(deleteTaskAction(id));
-    dispatch(recordActionAction(deleteTaskAction(id), previousState));
+    
+    try {
+      // API 사용 여부 확인
+      if (!API_CONFIG.useLocalStorage) {
+        // API로 태스크 삭제
+        await taskService.deleteTask(id);
+        
+        // 로컬 상태 업데이트
+        dispatch(deleteTaskAction(id));
+        dispatch(recordActionAction(deleteTaskAction(id), previousState));
+        return;
+      }
+      
+      // 로컬 스토리지 사용 시
+      dispatch(deleteTaskAction(id));
+      dispatch(recordActionAction(deleteTaskAction(id), previousState));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 
+                          (typeof error === 'object' && error !== null && 'message' in error) ? 
+                          String(error.message) : '태스크 삭제에 실패했습니다.';
+      console.error('태스크 삭제 오류:', errorMessage);
+      
+      // 오류 상태 업데이트
+      dispatch(fetchTasksFailureAction(errorMessage));
+      
+      // 오류 발생 시 현재 상태로 복구
+      if (!API_CONFIG.useLocalStorage) {
+        fetchTasks();
+      }
+    }
   };
 
   /**
    * 할 일 완료 함수
    */
-  const completeTask = (id: string) => {
+  const completeTask = async (id: string, isCompleted: boolean) => {
     const previousState = { tasks: [...state.tasks] };
-    dispatch(completeTaskAction(id));
-    dispatch(recordActionAction(completeTaskAction(id), previousState));
+    
+    try {
+      // API 사용 여부 확인
+      if (!API_CONFIG.useLocalStorage) {
+        // 현재 태스크 찾기
+        const currentTask = state.tasks.find(task => task.id === id);
+        if (!currentTask) {
+          throw new Error('완료할 태스크를 찾을 수 없습니다.');
+        }
+        
+        // 업데이트된 태스크 생성
+        const updatedTask: Task = {
+          ...currentTask,
+          status: isCompleted ? TaskStatus.DONE : TaskStatus.TODO,
+          completedAt: isCompleted ? new Date() : undefined,
+          updatedAt: new Date()
+        };
+        
+        // API로 태스크 업데이트
+        await taskService.updateTask(updatedTask);
+        
+        // 로컬 상태 업데이트
+        dispatch(completeTaskAction(id));
+        dispatch(recordActionAction(completeTaskAction(id), previousState));
+        return;
+      }
+      
+      // 로컬 스토리지 사용 시
+      dispatch(completeTaskAction(id));
+      dispatch(recordActionAction(completeTaskAction(id), previousState));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 
+                          (typeof error === 'object' && error !== null && 'message' in error) ? 
+                          String(error.message) : '태스크 완료 상태 변경에 실패했습니다.';
+      console.error('태스크 완료 상태 변경 오류:', errorMessage);
+      
+      // 오류 상태 업데이트
+      dispatch(fetchTasksFailureAction(errorMessage));
+      
+      // 오류 발생 시 현재 상태로 복구
+      if (!API_CONFIG.useLocalStorage) {
+        fetchTasks();
+      }
+    }
   };
   
   /**
@@ -104,12 +247,30 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
 
   /**
    * 할 일 목록 가져오기 함수
-   * 현재는 로컬 스토리지에서 가져오지만, 추후 백엔드 API로 대체될 예정
+   * API 서비스 또는 로컬 스토리지에서 데이터 가져오기
    */
   const fetchTasks = async () => {
     dispatch(fetchTasksRequestAction());
     
     try {
+      // API 사용 여부 확인
+      if (!API_CONFIG.useLocalStorage) {
+        // API로 할 일 목록 가져오기
+        const tasks = await taskService.getAllTasks();
+        
+        // 날짜 객체로 변환
+        const parsedTasks = tasks.map((task: Task) => ({
+          ...task,
+          createdAt: new Date(task.createdAt),
+          updatedAt: new Date(task.updatedAt),
+          completedAt: task.completedAt ? new Date(task.completedAt) : undefined,
+          dueDate: task.dueDate ? new Date(task.dueDate) : undefined
+        }));
+        
+        dispatch(fetchTasksSuccessAction(parsedTasks));
+        return;
+      }
+      
       // 로컬 스토리지 사용 가능 여부 확인
       if (!isStorageAvailable()) {
         throw new Error('로컬 스토리지를 사용할 수 없습니다.');
@@ -134,7 +295,10 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
       
       dispatch(fetchTasksSuccessAction(parsedTasks));
     } catch (error) {
-      dispatch(fetchTasksFailureAction(error instanceof Error ? error.message : '할 일을 불러오는 데 실패했습니다.'));
+      const errorMessage = error instanceof Error ? error.message : 
+                          (typeof error === 'object' && error !== null && 'message' in error) ? 
+                          String(error.message) : '할 일을 불러오는 데 실패했습니다.';
+      dispatch(fetchTasksFailureAction(errorMessage));
     }
   };
 
@@ -152,8 +316,13 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
     dispatch(clearFilterAction());
   };
 
-  // 상태가 변경될 때마다 로컬 스토리지에 저장
+  // 상태가 변경될 때마다 로컬 스토리지에 저장 (로컬 스토리지 사용 시에만)
   useEffect(() => {
+    // API 사용 시에는 로컬 스토리지에 저장하지 않음
+    if (!API_CONFIG.useLocalStorage) {
+      return;
+    }
+    
     // 로컬 스토리지 사용 가능 여부 확인
     if (!isStorageAvailable()) {
       console.error('로컬 스토리지를 사용할 수 없습니다.');
@@ -164,14 +333,19 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({
     if (state.tasks.length > 0) {
       saveToStorage(StorageKeys.TASKS, state.tasks);
     }
-  }, [state.tasks]);
+  }, [state.tasks, API_CONFIG.useLocalStorage]);
   
-  // 필터 상태가 변경될 때마다 로컬 스토리지에 저장
+  // 필터 상태가 변경될 때마다 로컬 스토리지에 저장 (로컬 스토리지 사용 시에만)
   useEffect(() => {
+    // API 사용 시에는 로컬 스토리지에 저장하지 않음
+    if (!API_CONFIG.useLocalStorage) {
+      return;
+    }
+    
     if (isStorageAvailable() && state.filter) {
       saveToStorage(StorageKeys.FILTER, state.filter);
     }
-  }, [state.filter]);
+  }, [state.filter, API_CONFIG.useLocalStorage]);
   
   // 컴포넌트 마운트 시 로컬 스토리지에서 할 일 목록 불러오기
   useEffect(() => {

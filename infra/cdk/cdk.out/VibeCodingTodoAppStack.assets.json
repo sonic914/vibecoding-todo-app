@@ -1,0 +1,36 @@
+{
+  "version": "44.0.0",
+  "files": {
+    "794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf": {
+      "displayName": "GetAllTasksFunction/Code",
+      "source": {
+        "path": "asset.794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-ap-northeast-2": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-2",
+          "objectKey": "794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf.zip",
+          "region": "ap-northeast-2",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-ap-northeast-2"
+        }
+      }
+    },
+    "cab0266ba20ee5882c7d3760c08eba8690782041be0472d229a5d453816c97bf": {
+      "displayName": "VibeCodingTodoAppStack Template",
+      "source": {
+        "path": "VibeCodingTodoAppStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-ap-northeast-2": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-2",
+          "objectKey": "cab0266ba20ee5882c7d3760c08eba8690782041be0472d229a5d453816c97bf.json",
+          "region": "ap-northeast-2",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-ap-northeast-2"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

@@ -1,0 +1,1576 @@
+{
+ "Description": "VibeCoding TODO App Infrastructure Stack",
+ "Resources": {
+  "TasksTable88911DC5": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "userId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "createdAt",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "UserIdIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "userId",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "createdAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ],
+    "PointInTimeRecoverySpecification": {
+     "PointInTimeRecoveryEnabled": true
+    },
+    "SSESpecification": {
+     "SSEEnabled": false
+    },
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TimeToLiveSpecification": {
+     "AttributeName": "ttl",
+     "Enabled": true
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TasksTable/Resource"
+   }
+  },
+  "GetAllTasksFunctionServiceRole17168D05": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/GetAllTasksFunction/ServiceRole/Resource"
+   }
+  },
+  "GetAllTasksFunctionServiceRoleDefaultPolicy88A727BC": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:DeleteItem",
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TasksTable88911DC5",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "TasksTable88911DC5",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "GetAllTasksFunctionServiceRoleDefaultPolicy88A727BC",
+    "Roles": [
+     {
+      "Ref": "GetAllTasksFunctionServiceRole17168D05"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/GetAllTasksFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "GetAllTasksFunction23175BB6": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-2"
+     },
+     "S3Key": "794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf.zip"
+    },
+    "Description": "VibeCoding TODO App - GetAllTasksFunction Lambda Function",
+    "Environment": {
+     "Variables": {
+      "TASKS_TABLE_NAME": {
+       "Ref": "TasksTable88911DC5"
+      },
+      "USER_POOL_ID": "ap-northeast-2_10IJl15Ho",
+      "APP_CLIENT_ID": "1d8btkjuugl5hm6me1pd2m154b"
+     }
+    },
+    "Handler": "dist/presentation/handlers/getAllTasksHandler.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "GetAllTasksFunctionServiceRole17168D05",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "GetAllTasksFunctionServiceRoleDefaultPolicy88A727BC",
+    "GetAllTasksFunctionServiceRole17168D05"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/GetAllTasksFunction/Resource",
+    "aws:asset:path": "asset.794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "GetTaskByIdFunctionServiceRoleC2D1AFBE": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/GetTaskByIdFunction/ServiceRole/Resource"
+   }
+  },
+  "GetTaskByIdFunctionServiceRoleDefaultPolicy2DF9D0D3": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:DeleteItem",
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TasksTable88911DC5",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "TasksTable88911DC5",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "GetTaskByIdFunctionServiceRoleDefaultPolicy2DF9D0D3",
+    "Roles": [
+     {
+      "Ref": "GetTaskByIdFunctionServiceRoleC2D1AFBE"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/GetTaskByIdFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "GetTaskByIdFunctionFEAC20A4": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-2"
+     },
+     "S3Key": "794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf.zip"
+    },
+    "Description": "VibeCoding TODO App - GetTaskByIdFunction Lambda Function",
+    "Environment": {
+     "Variables": {
+      "TASKS_TABLE_NAME": {
+       "Ref": "TasksTable88911DC5"
+      },
+      "USER_POOL_ID": "ap-northeast-2_10IJl15Ho",
+      "APP_CLIENT_ID": "1d8btkjuugl5hm6me1pd2m154b"
+     }
+    },
+    "Handler": "dist/presentation/handlers/getTaskByIdHandler.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "GetTaskByIdFunctionServiceRoleC2D1AFBE",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "GetTaskByIdFunctionServiceRoleDefaultPolicy2DF9D0D3",
+    "GetTaskByIdFunctionServiceRoleC2D1AFBE"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/GetTaskByIdFunction/Resource",
+    "aws:asset:path": "asset.794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "CreateTaskFunctionServiceRole819710B4": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/CreateTaskFunction/ServiceRole/Resource"
+   }
+  },
+  "CreateTaskFunctionServiceRoleDefaultPolicy507F4D73": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:DeleteItem",
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TasksTable88911DC5",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "TasksTable88911DC5",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "CreateTaskFunctionServiceRoleDefaultPolicy507F4D73",
+    "Roles": [
+     {
+      "Ref": "CreateTaskFunctionServiceRole819710B4"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/CreateTaskFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "CreateTaskFunctionDCD05326": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-2"
+     },
+     "S3Key": "794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf.zip"
+    },
+    "Description": "VibeCoding TODO App - CreateTaskFunction Lambda Function",
+    "Environment": {
+     "Variables": {
+      "TASKS_TABLE_NAME": {
+       "Ref": "TasksTable88911DC5"
+      },
+      "USER_POOL_ID": "ap-northeast-2_10IJl15Ho",
+      "APP_CLIENT_ID": "1d8btkjuugl5hm6me1pd2m154b"
+     }
+    },
+    "Handler": "dist/presentation/handlers/createTaskHandler.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "CreateTaskFunctionServiceRole819710B4",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "CreateTaskFunctionServiceRoleDefaultPolicy507F4D73",
+    "CreateTaskFunctionServiceRole819710B4"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/CreateTaskFunction/Resource",
+    "aws:asset:path": "asset.794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "UpdateTaskFunctionServiceRole73D32298": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/UpdateTaskFunction/ServiceRole/Resource"
+   }
+  },
+  "UpdateTaskFunctionServiceRoleDefaultPolicy2ABB2E75": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:DeleteItem",
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TasksTable88911DC5",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "TasksTable88911DC5",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "UpdateTaskFunctionServiceRoleDefaultPolicy2ABB2E75",
+    "Roles": [
+     {
+      "Ref": "UpdateTaskFunctionServiceRole73D32298"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/UpdateTaskFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "UpdateTaskFunctionF338E219": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-2"
+     },
+     "S3Key": "794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf.zip"
+    },
+    "Description": "VibeCoding TODO App - UpdateTaskFunction Lambda Function",
+    "Environment": {
+     "Variables": {
+      "TASKS_TABLE_NAME": {
+       "Ref": "TasksTable88911DC5"
+      },
+      "USER_POOL_ID": "ap-northeast-2_10IJl15Ho",
+      "APP_CLIENT_ID": "1d8btkjuugl5hm6me1pd2m154b"
+     }
+    },
+    "Handler": "dist/presentation/handlers/updateTaskHandler.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "UpdateTaskFunctionServiceRole73D32298",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "UpdateTaskFunctionServiceRoleDefaultPolicy2ABB2E75",
+    "UpdateTaskFunctionServiceRole73D32298"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/UpdateTaskFunction/Resource",
+    "aws:asset:path": "asset.794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "DeleteTaskFunctionServiceRole85BE28FD": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/DeleteTaskFunction/ServiceRole/Resource"
+   }
+  },
+  "DeleteTaskFunctionServiceRoleDefaultPolicyDEB00084": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:DeleteItem",
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TasksTable88911DC5",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "TasksTable88911DC5",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "DeleteTaskFunctionServiceRoleDefaultPolicyDEB00084",
+    "Roles": [
+     {
+      "Ref": "DeleteTaskFunctionServiceRole85BE28FD"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/DeleteTaskFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "DeleteTaskFunctionC86CB991": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-2"
+     },
+     "S3Key": "794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf.zip"
+    },
+    "Description": "VibeCoding TODO App - DeleteTaskFunction Lambda Function",
+    "Environment": {
+     "Variables": {
+      "TASKS_TABLE_NAME": {
+       "Ref": "TasksTable88911DC5"
+      },
+      "USER_POOL_ID": "ap-northeast-2_10IJl15Ho",
+      "APP_CLIENT_ID": "1d8btkjuugl5hm6me1pd2m154b"
+     }
+    },
+    "Handler": "dist/presentation/handlers/deleteTaskHandler.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "DeleteTaskFunctionServiceRole85BE28FD",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "DeleteTaskFunctionServiceRoleDefaultPolicyDEB00084",
+    "DeleteTaskFunctionServiceRole85BE28FD"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/DeleteTaskFunction/Resource",
+    "aws:asset:path": "asset.794400a19b23d5039133fb1bf8cf61617b277a65b03f7a08896361b38ba74adf",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "TodoApi145E2E30": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "API for VibeCoding TODO Application",
+    "Name": "VibeCoding TODO API"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Resource"
+   }
+  },
+  "TodoApiDeployment88898756b12d1b1c5a7b7b3b1eeb9ed9befe59aa": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "API for VibeCoding TODO Application",
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    }
+   },
+   "DependsOn": [
+    "TodoApiOPTIONS40528783",
+    "TodoApitasksidDELETE52F2A485",
+    "TodoApitasksidGET9ADC8241",
+    "TodoApitasksidOPTIONSD3A4DB4A",
+    "TodoApitasksidPUT8EC329A7",
+    "TodoApitasksid1A3591A7",
+    "TodoApitasksGETB3108906",
+    "TodoApitasksOPTIONS22B64B1E",
+    "TodoApitasksPOSTAE7F1075",
+    "TodoApitasks7009E9BF"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Deployment/Resource"
+   }
+  },
+  "TodoApiDeploymentStageapi880238A6": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "TodoApiDeployment88898756b12d1b1c5a7b7b3b1eeb9ed9befe59aa"
+    },
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    },
+    "StageName": "api"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/DeploymentStage.api/Resource"
+   }
+  },
+  "TodoApiOPTIONS40528783": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Max-Age": "'86400'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Max-Age": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "TodoApi145E2E30",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/OPTIONS/Resource"
+   }
+  },
+  "TodoApitasks7009E9BF": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "TodoApi145E2E30",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "tasks",
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/Resource"
+   }
+  },
+  "TodoApitasksOPTIONS22B64B1E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Max-Age": "'86400'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Max-Age": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "TodoApitasks7009E9BF"
+    },
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/OPTIONS/Resource"
+   }
+  },
+  "TodoApitasksGETApiPermissionVibeCodingTodoAppStackTodoApi9593C26EGETtasks08B7AB3C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetAllTasksFunction23175BB6",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-2:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "TodoApi145E2E30"
+       },
+       "/",
+       {
+        "Ref": "TodoApiDeploymentStageapi880238A6"
+       },
+       "/GET/tasks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/GET/ApiPermission.VibeCodingTodoAppStackTodoApi9593C26E.GET..tasks"
+   }
+  },
+  "TodoApitasksGETApiPermissionTestVibeCodingTodoAppStackTodoApi9593C26EGETtasksC085F218": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetAllTasksFunction23175BB6",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-2:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "TodoApi145E2E30"
+       },
+       "/test-invoke-stage/GET/tasks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/GET/ApiPermission.Test.VibeCodingTodoAppStackTodoApi9593C26E.GET..tasks"
+   }
+  },
+  "TodoApitasksGETB3108906": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "TodoApiAuthorizerC7052E80"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:ap-northeast-2:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "GetAllTasksFunction23175BB6",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "TodoApitasks7009E9BF"
+    },
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/GET/Resource"
+   }
+  },
+  "TodoApitasksPOSTApiPermissionVibeCodingTodoAppStackTodoApi9593C26EPOSTtasks0C298E93": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CreateTaskFunctionDCD05326",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-2:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "TodoApi145E2E30"
+       },
+       "/",
+       {
+        "Ref": "TodoApiDeploymentStageapi880238A6"
+       },
+       "/POST/tasks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/POST/ApiPermission.VibeCodingTodoAppStackTodoApi9593C26E.POST..tasks"
+   }
+  },
+  "TodoApitasksPOSTApiPermissionTestVibeCodingTodoAppStackTodoApi9593C26EPOSTtasksCD425A99": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CreateTaskFunctionDCD05326",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-2:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "TodoApi145E2E30"
+       },
+       "/test-invoke-stage/POST/tasks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/POST/ApiPermission.Test.VibeCodingTodoAppStackTodoApi9593C26E.POST..tasks"
+   }
+  },
+  "TodoApitasksPOSTAE7F1075": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "TodoApiAuthorizerC7052E80"
+    },
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:ap-northeast-2:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "CreateTaskFunctionDCD05326",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "TodoApitasks7009E9BF"
+    },
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/POST/Resource"
+   }
+  },
+  "TodoApitasksid1A3591A7": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "TodoApitasks7009E9BF"
+    },
+    "PathPart": "{id}",
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/Resource"
+   }
+  },
+  "TodoApitasksidOPTIONSD3A4DB4A": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+        "method.response.header.Access-Control-Max-Age": "'86400'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Max-Age": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "TodoApitasksid1A3591A7"
+    },
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/OPTIONS/Resource"
+   }
+  },
+  "TodoApitasksidGETApiPermissionVibeCodingTodoAppStackTodoApi9593C26EGETtasksid2081A530": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetTaskByIdFunctionFEAC20A4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-2:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "TodoApi145E2E30"
+       },
+       "/",
+       {
+        "Ref": "TodoApiDeploymentStageapi880238A6"
+       },
+       "/GET/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/GET/ApiPermission.VibeCodingTodoAppStackTodoApi9593C26E.GET..tasks.{id}"
+   }
+  },
+  "TodoApitasksidGETApiPermissionTestVibeCodingTodoAppStackTodoApi9593C26EGETtasksid9E2BB160": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetTaskByIdFunctionFEAC20A4",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-2:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "TodoApi145E2E30"
+       },
+       "/test-invoke-stage/GET/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/GET/ApiPermission.Test.VibeCodingTodoAppStackTodoApi9593C26E.GET..tasks.{id}"
+   }
+  },
+  "TodoApitasksidGET9ADC8241": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "TodoApiAuthorizerC7052E80"
+    },
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:ap-northeast-2:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "GetTaskByIdFunctionFEAC20A4",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "TodoApitasksid1A3591A7"
+    },
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/GET/Resource"
+   }
+  },
+  "TodoApitasksidPUTApiPermissionVibeCodingTodoAppStackTodoApi9593C26EPUTtasksid9BE69B8F": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "UpdateTaskFunctionF338E219",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-2:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "TodoApi145E2E30"
+       },
+       "/",
+       {
+        "Ref": "TodoApiDeploymentStageapi880238A6"
+       },
+       "/PUT/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/PUT/ApiPermission.VibeCodingTodoAppStackTodoApi9593C26E.PUT..tasks.{id}"
+   }
+  },
+  "TodoApitasksidPUTApiPermissionTestVibeCodingTodoAppStackTodoApi9593C26EPUTtasksidF06E0786": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "UpdateTaskFunctionF338E219",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-2:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "TodoApi145E2E30"
+       },
+       "/test-invoke-stage/PUT/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/PUT/ApiPermission.Test.VibeCodingTodoAppStackTodoApi9593C26E.PUT..tasks.{id}"
+   }
+  },
+  "TodoApitasksidPUT8EC329A7": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "TodoApiAuthorizerC7052E80"
+    },
+    "HttpMethod": "PUT",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:ap-northeast-2:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "UpdateTaskFunctionF338E219",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "TodoApitasksid1A3591A7"
+    },
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/PUT/Resource"
+   }
+  },
+  "TodoApitasksidDELETEApiPermissionVibeCodingTodoAppStackTodoApi9593C26EDELETEtasksid5BCAA69D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "DeleteTaskFunctionC86CB991",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-2:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "TodoApi145E2E30"
+       },
+       "/",
+       {
+        "Ref": "TodoApiDeploymentStageapi880238A6"
+       },
+       "/DELETE/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/DELETE/ApiPermission.VibeCodingTodoAppStackTodoApi9593C26E.DELETE..tasks.{id}"
+   }
+  },
+  "TodoApitasksidDELETEApiPermissionTestVibeCodingTodoAppStackTodoApi9593C26EDELETEtasksidC635359C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "DeleteTaskFunctionC86CB991",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-2:",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "TodoApi145E2E30"
+       },
+       "/test-invoke-stage/DELETE/tasks/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/DELETE/ApiPermission.Test.VibeCodingTodoAppStackTodoApi9593C26E.DELETE..tasks.{id}"
+   }
+  },
+  "TodoApitasksidDELETE52F2A485": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "TodoApiAuthorizerC7052E80"
+    },
+    "HttpMethod": "DELETE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:ap-northeast-2:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "DeleteTaskFunctionC86CB991",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "TodoApitasksid1A3591A7"
+    },
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/DELETE/Resource"
+   }
+  },
+  "TodoApiAuthorizerC7052E80": {
+   "Type": "AWS::ApiGateway::Authorizer",
+   "Properties": {
+    "IdentitySource": "method.request.header.Authorization",
+    "Name": "TodoApiCognitoAuthorizer",
+    "ProviderARNs": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:cognito-idp:ap-northeast-2:",
+        {
+         "Ref": "AWS::AccountId"
+        },
+        ":userpool/ap-northeast-2_10IJl15Ho"
+       ]
+      ]
+     }
+    ],
+    "RestApiId": {
+     "Ref": "TodoApi145E2E30"
+    },
+    "Type": "COGNITO_USER_POOLS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/TodoApiAuthorizer/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02PQW7CQAxFz8J+cCGoB4BW3VVFoV0jJ3GDIRlHsacojXL3aia0ZfWf/T3f4wyy1RpWC7zqsqwuy4YLGA+G5cXlpBL6khxe9ThWg8dWqgLGdywack+fPsHkGmyLCmF8Cb40Fh+te95T37Iqi58cYwtjLvP7pHtpuBzSXKLJ6eaIqmQK2yhON7AL5YVsh0oOO67R6IoDjDmpbTtOWTd8pq6RoSVvsXtXHQzrtHWG3+NS5ivZSapo3ujv9Dn5xlJ7NvlQ6vcijW6DnaTnb+rj2H81TS59PC5iX0fzLVgXbHJeKoKzPnxlGawfYb04K/OyD964Jchn/QH4ZH6IkwEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "VibeCodingTodoAppStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "TodoApiEndpointC1E16B6C": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "TodoApi145E2E30"
+      },
+      ".execute-api.ap-northeast-2.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "TodoApiDeploymentStageapi880238A6"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "TasksTableName": {
+   "Description": "DynamoDB Tasks Table Name",
+   "Value": {
+    "Ref": "TasksTable88911DC5"
+   }
+  },
+  "ApiUrl": {
+   "Description": "API Gateway URL",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "TodoApi145E2E30"
+      },
+      ".execute-api.ap-northeast-2.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "TodoApiDeploymentStageapi880238A6"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

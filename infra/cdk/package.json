@@ -1,0 +1,38 @@
+{
+  "name": "vibecoding-todo-app-infra",
+  "version": "1.0.0",
+  "description": "VibeCoding TODO App Infrastructure as Code",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk",
+    "synth": "cdk synth",
+    "deploy": "cdk deploy",
+    "diff": "cdk diff",
+    "bootstrap": "cdk bootstrap"
+  },
+  "keywords": [
+    "aws",
+    "cdk",
+    "infrastructure",
+    "todo",
+    "app"
+  ],
+  "author": "VibeCoding Team",
+  "license": "ISC",
+  "dependencies": {
+    "aws-cdk-lib": "^2.201.0",
+    "constructs": "^10.4.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^24.0.1",
+    "esbuild": "^0.25.5",
+    "jest": "^30.0.0",
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

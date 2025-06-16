@@ -1,11 +1,15 @@
 import { AppShell, Container, Title, Text, Group, ActionIcon, useMantineColorScheme, Stack, Button, Tooltip, rem } from '@mantine/core';
 import { IconSun, IconMoon, IconArrowBackUp } from '@tabler/icons-react';
 import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { loadThemeFromStorage, saveThemeToStorage, getSystemTheme } from '@/utils/themeUtils';
 import { TaskProvider, useTaskContext } from '@/contexts/taskContext/TaskContext';
 import { TaskForm } from '@/components/task/TaskForm';
 import { TaskFilter } from '@/components/task/TaskFilter';
 import { TaskList } from '@/components/task/TaskList';
+import { AuthProvider, useAuthContext } from '@/contexts/authContext/AuthContext';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { AuthPage } from '@/pages/auth/AuthPage';
 
 /**
  * Undo 버튼 컴포넌트
@@ -32,6 +36,9 @@ const UndoButton = () => {
 /**
  * 메인 앱 컴포넌트
  */
+/**
+ * 메인 앱 컴포넌트
+ */
 function App() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
 
@@ -52,6 +59,9 @@ function App() {
     saveThemeToStorage(newColorScheme);
   };
 
+  // 할 일 관리 화면 컴포넌트
+  const TaskDashboard = () => {
+  const { isLoggedIn, logout } = useAuthContext();
   return (
     <TaskProvider>
       <AppShell header={{ height: 60 }}>
@@ -70,6 +80,11 @@ function App() {
                   {colorScheme === 'dark' ? <IconSun size={rem(18)} /> : <IconMoon size={rem(18)} />}
                 </ActionIcon>
               </Tooltip>
+              {isLoggedIn && (
+                <Button variant="outline" onClick={logout} size="xs">
+                  로그아웃
+                </Button>
+              )}
             </Group>
           </Container>
         </AppShell.Header>
@@ -103,6 +118,21 @@ function App() {
         </AppShell.Main>
       </AppShell>
     </TaskProvider>
+  );
+};
+
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/auth" element={<AuthPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<TaskDashboard />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

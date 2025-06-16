@@ -1,0 +1,324 @@
+{
+  "version": "44.0.0",
+  "artifacts": {
+    "VibeCodingTodoAppStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "VibeCodingTodoAppStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "VibeCodingTodoAppStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/ap-northeast-2",
+      "properties": {
+        "templateFile": "VibeCodingTodoAppStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-ap-northeast-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-ap-northeast-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-ap-northeast-2/cab0266ba20ee5882c7d3760c08eba8690782041be0472d229a5d453816c97bf.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "VibeCodingTodoAppStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-ap-northeast-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "VibeCodingTodoAppStack.assets"
+      ],
+      "metadata": {
+        "/VibeCodingTodoAppStack/TasksTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TasksTable88911DC5"
+          }
+        ],
+        "/VibeCodingTodoAppStack/GetAllTasksFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetAllTasksFunctionServiceRole17168D05"
+          }
+        ],
+        "/VibeCodingTodoAppStack/GetAllTasksFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetAllTasksFunctionServiceRoleDefaultPolicy88A727BC"
+          }
+        ],
+        "/VibeCodingTodoAppStack/GetAllTasksFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetAllTasksFunction23175BB6"
+          }
+        ],
+        "/VibeCodingTodoAppStack/GetTaskByIdFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetTaskByIdFunctionServiceRoleC2D1AFBE"
+          }
+        ],
+        "/VibeCodingTodoAppStack/GetTaskByIdFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetTaskByIdFunctionServiceRoleDefaultPolicy2DF9D0D3"
+          }
+        ],
+        "/VibeCodingTodoAppStack/GetTaskByIdFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GetTaskByIdFunctionFEAC20A4"
+          }
+        ],
+        "/VibeCodingTodoAppStack/CreateTaskFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CreateTaskFunctionServiceRole819710B4"
+          }
+        ],
+        "/VibeCodingTodoAppStack/CreateTaskFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CreateTaskFunctionServiceRoleDefaultPolicy507F4D73"
+          }
+        ],
+        "/VibeCodingTodoAppStack/CreateTaskFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CreateTaskFunctionDCD05326"
+          }
+        ],
+        "/VibeCodingTodoAppStack/UpdateTaskFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateTaskFunctionServiceRole73D32298"
+          }
+        ],
+        "/VibeCodingTodoAppStack/UpdateTaskFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateTaskFunctionServiceRoleDefaultPolicy2ABB2E75"
+          }
+        ],
+        "/VibeCodingTodoAppStack/UpdateTaskFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateTaskFunctionF338E219"
+          }
+        ],
+        "/VibeCodingTodoAppStack/DeleteTaskFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DeleteTaskFunctionServiceRole85BE28FD"
+          }
+        ],
+        "/VibeCodingTodoAppStack/DeleteTaskFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DeleteTaskFunctionServiceRoleDefaultPolicyDEB00084"
+          }
+        ],
+        "/VibeCodingTodoAppStack/DeleteTaskFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DeleteTaskFunctionC86CB991"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApi145E2E30"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApiDeployment88898756b12d1b1c5a7b7b3b1eeb9ed9befe59aa"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/DeploymentStage.api/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApiDeploymentStageapi880238A6"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApiEndpointC1E16B6C"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApiOPTIONS40528783"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasks7009E9BF"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksOPTIONS22B64B1E"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/GET/ApiPermission.VibeCodingTodoAppStackTodoApi9593C26E.GET..tasks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksGETApiPermissionVibeCodingTodoAppStackTodoApi9593C26EGETtasks08B7AB3C"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/GET/ApiPermission.Test.VibeCodingTodoAppStackTodoApi9593C26E.GET..tasks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksGETApiPermissionTestVibeCodingTodoAppStackTodoApi9593C26EGETtasksC085F218"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksGETB3108906"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/POST/ApiPermission.VibeCodingTodoAppStackTodoApi9593C26E.POST..tasks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksPOSTApiPermissionVibeCodingTodoAppStackTodoApi9593C26EPOSTtasks0C298E93"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/POST/ApiPermission.Test.VibeCodingTodoAppStackTodoApi9593C26E.POST..tasks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksPOSTApiPermissionTestVibeCodingTodoAppStackTodoApi9593C26EPOSTtasksCD425A99"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksPOSTAE7F1075"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksid1A3591A7"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksidOPTIONSD3A4DB4A"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/GET/ApiPermission.VibeCodingTodoAppStackTodoApi9593C26E.GET..tasks.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksidGETApiPermissionVibeCodingTodoAppStackTodoApi9593C26EGETtasksid2081A530"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/GET/ApiPermission.Test.VibeCodingTodoAppStackTodoApi9593C26E.GET..tasks.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksidGETApiPermissionTestVibeCodingTodoAppStackTodoApi9593C26EGETtasksid9E2BB160"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksidGET9ADC8241"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/PUT/ApiPermission.VibeCodingTodoAppStackTodoApi9593C26E.PUT..tasks.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksidPUTApiPermissionVibeCodingTodoAppStackTodoApi9593C26EPUTtasksid9BE69B8F"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/PUT/ApiPermission.Test.VibeCodingTodoAppStackTodoApi9593C26E.PUT..tasks.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksidPUTApiPermissionTestVibeCodingTodoAppStackTodoApi9593C26EPUTtasksidF06E0786"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/PUT/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksidPUT8EC329A7"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/DELETE/ApiPermission.VibeCodingTodoAppStackTodoApi9593C26E.DELETE..tasks.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksidDELETEApiPermissionVibeCodingTodoAppStackTodoApi9593C26EDELETEtasksid5BCAA69D"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/DELETE/ApiPermission.Test.VibeCodingTodoAppStackTodoApi9593C26E.DELETE..tasks.{id}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksidDELETEApiPermissionTestVibeCodingTodoAppStackTodoApi9593C26EDELETEtasksidC635359C"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApi/Default/tasks/{id}/DELETE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApitasksidDELETE52F2A485"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TodoApiAuthorizer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TodoApiAuthorizerC7052E80"
+          }
+        ],
+        "/VibeCodingTodoAppStack/TasksTableName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TasksTableName"
+          }
+        ],
+        "/VibeCodingTodoAppStack/ApiUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiUrl"
+          }
+        ],
+        "/VibeCodingTodoAppStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/VibeCodingTodoAppStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/VibeCodingTodoAppStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "VibeCodingTodoAppStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  },
+  "minimumCliVersion": "2.1018.1"
+}
