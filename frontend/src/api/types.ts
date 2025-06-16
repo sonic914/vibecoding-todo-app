@@ -1,4 +1,4 @@
-import { Task } from '../domain/task/types';
+import { Task } from '../domain/task/Task';
 
 export interface ApiResponse<T> {
   statusCode: number;

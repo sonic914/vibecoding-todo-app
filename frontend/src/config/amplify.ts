@@ -4,7 +4,6 @@ import { Amplify } from 'aws-amplify';
 const cognitoDomain = import.meta.env.VITE_COGNITO_DOMAIN;
 const cognitoUserPoolId = import.meta.env.VITE_COGNITO_USER_POOL_ID;
 const cognitoAppClientId = import.meta.env.VITE_COGNITO_APP_CLIENT_ID;
-const cognitoRegion = import.meta.env.VITE_COGNITO_REGION;
 
 // Ensure the domain for OAuth does not include 'https://'
 const oauthDomain = cognitoDomain.startsWith('https://') 
@@ -16,7 +15,6 @@ Amplify.configure({
     Cognito: {
       userPoolId: cognitoUserPoolId,
       userPoolClientId: cognitoAppClientId,
-      region: cognitoRegion,
       loginWith: {
         oauth: {
           domain: oauthDomain, // Use the processed domain
